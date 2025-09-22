@@ -67,60 +67,72 @@ export const parseStartTime = (startTimeCx) => {
 
     // Try parsing as-is first
     date = new Date(startTimeCx);
+    console.log("First parse attempt:", date, "Valid:", !isNaN(date.getTime()));
 
-    // If invalid, try parsing the specific format
-    if (isNaN(date.getTime())) {
-      console.log("First parse failed, trying specific format parsing");
+    // Always try parsing the specific format to extract timezone
+    console.log("Trying specific format parsing");
 
-      // Parse format: "26-09-2025, 04:00:00 PM CEST"
-      const match = startTimeCx.match(
-        /(\d{1,2})-(\d{1,2})-(\d{4}),\s*(\d{1,2}):(\d{2}):(\d{2})\s*(AM|PM)\s*(.+)/
-      );
+    // Parse format: "26-09-2025, 04:00:00 PM CEST"
+    const match = startTimeCx.match(
+      /(\d{1,2})-(\d{1,2})-(\d{4}),\s*(\d{1,2}):(\d{2}):(\d{2})\s*(AM|PM)\s*(.+)/
+    );
 
-      if (match) {
-        const [, day, month, year, hour, minute, second, ampm, timezone] =
-          match;
+    console.log("Regex match result:", match);
 
-        // Convert to 24-hour format
-        let hour24 = parseInt(hour);
-        if (ampm === "PM" && hour24 !== 12) {
-          hour24 += 12;
-        } else if (ampm === "AM" && hour24 === 12) {
-          hour24 = 0;
-        }
+    if (match) {
+      const [, day, month, year, hour, minute, second, ampm, timezone] = match;
 
-        // Create date in ISO format (YYYY-MM-DDTHH:MM:SS)
-        const isoString = `${year}-${month.padStart(2, "0")}-${day.padStart(
-          2,
-          "0"
-        )}T${hour24.toString().padStart(2, "0")}:${minute}:${second}`;
+      // Convert to 24-hour format
+      let hour24 = parseInt(hour);
+      if (ampm === "PM" && hour24 !== 12) {
+        hour24 += 12;
+      } else if (ampm === "AM" && hour24 === 12) {
+        hour24 = 0;
+      }
+
+      // Create date in ISO format (YYYY-MM-DDTHH:MM:SS)
+      const isoString = `${year}-${month.padStart(2, "0")}-${day.padStart(
+        2,
+        "0"
+      )}T${hour24.toString().padStart(2, "0")}:${minute}:${second}`;
+
+      // Try to parse the original string first to preserve timezone
+      date = new Date(startTimeCx);
+
+      // If that fails, try with ISO string
+      if (isNaN(date.getTime())) {
         date = new Date(isoString);
+      }
 
-        // Store the timezone for later use
-        date._originalTimezone = timezone;
+      // Store the timezone for later use
+      date._originalTimezone = timezone;
 
-        console.log(
-          "Parsed from format:",
-          isoString,
-          "Result:",
-          date,
-          "Timezone:",
-          timezone
-        );
-      } else {
-        // Fallback: try other common formats
-        const formats = [
-          startTimeCx.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3"), // YYYYMMDD -> YYYY-MM-DD
-          startTimeCx.replace(/(\d{2})\/(\d{2})\/(\d{4})/, "$3-$1-$2"), // MM/DD/YYYY -> YYYY-MM-DD
-          startTimeCx.replace(/(\d{2})-(\d{2})-(\d{4})/, "$3-$1-$2"), // DD-MM-YYYY -> YYYY-MM-DD
-        ];
+      // Also store the original time components for display
+      date._originalHour = hour24;
+      date._originalMinute = minute;
+      date._originalSecond = second;
 
-        for (const format of formats) {
-          date = new Date(format);
-          if (!isNaN(date.getTime())) {
-            console.log("Successfully parsed with format:", format);
-            break;
-          }
+      console.log(
+        "Parsed from format:",
+        isoString,
+        "Result:",
+        date,
+        "Timezone:",
+        timezone
+      );
+    } else {
+      // Fallback: try other common formats
+      const formats = [
+        startTimeCx.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3"), // YYYYMMDD -> YYYY-MM-DD
+        startTimeCx.replace(/(\d{2})\/(\d{2})\/(\d{4})/, "$3-$1-$2"), // MM/DD/YYYY -> YYYY-MM-DD
+        startTimeCx.replace(/(\d{2})-(\d{2})-(\d{4})/, "$3-$1-$2"), // DD-MM-YYYY -> YYYY-MM-DD
+      ];
+
+      for (const format of formats) {
+        date = new Date(format);
+        if (!isNaN(date.getTime())) {
+          console.log("Successfully parsed with format:", format);
+          break;
         }
       }
     }
@@ -144,22 +156,53 @@ export const parseStartTime = (startTimeCx) => {
     });
 
     // Format time as "HH:MM - HH:MM AM/PM TIMEZONE"
-    const startTime = date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
+    let startTime, endTime;
+
+    // If we have original time components, use them to avoid timezone conversion issues
+    console.log("Checking for original time components:", {
+      _originalHour: date._originalHour,
+      _originalMinute: date._originalMinute,
+      _originalTimezone: date._originalTimezone,
     });
 
-    // Add 1 hour for end time (assuming 1-hour class)
-    const endDate = new Date(date.getTime() + 60 * 60 * 1000);
-    const endTime = endDate.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
+    if (date._originalHour !== undefined) {
+      console.log("Using original time components");
+      const startHour = date._originalHour;
+      const startMinute = date._originalMinute;
+      const endHour = (startHour + 1) % 24;
+
+      // Format start time
+      const startHour12 =
+        startHour === 0 ? 12 : startHour > 12 ? startHour - 12 : startHour;
+      const startAmPm = startHour >= 12 ? "PM" : "AM";
+      startTime = `${startHour12}:${startMinute} ${startAmPm}`;
+
+      // Format end time
+      const endHour12 =
+        endHour === 0 ? 12 : endHour > 12 ? endHour - 12 : endHour;
+      const endAmPm = endHour >= 12 ? "PM" : "AM";
+      endTime = `${endHour12}:${startMinute} ${endAmPm}`;
+    } else {
+      // Fallback to original method
+      console.log("Using fallback method with toLocaleTimeString");
+      startTime = date.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      });
+
+      // Add 1 hour for end time (assuming 1-hour class)
+      const endDate = new Date(date.getTime() + 60 * 60 * 1000);
+      endTime = endDate.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      });
+    }
 
     // Use the original timezone if available, otherwise default to EST
     const timezone = date._originalTimezone || "EST";
+    console.log("Final timezone being used:", timezone);
 
     const result = {
       date: formattedDate,
