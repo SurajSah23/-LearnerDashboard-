@@ -77,7 +77,10 @@ const CongratsScreen = ({ dashboardData }) => {
                   src="https://cdn.prod.website-files.com/61f64598c68d4ab53ecff616/67371c611162209f4eb93108_thank%20you%20hero%20image.avif"
                   alt="Happy girl with headphones celebrating"
                   className="w-36 h-auto"
-                  style={{ filter: "drop-shadow(0 8px 20px rgba(0,0,0,0.08))" }}
+                  style={{ 
+                    filter: "drop-shadow(0 8px 20px rgba(0,0,0,0.08))",
+                    transform: "rotate(8deg)"
+                  }}
                 />
               </div>
 
@@ -214,7 +217,7 @@ const CongratsScreen = ({ dashboardData }) => {
                           </div>
 
                           <p className="text-sm sm:text-base text-gray-500 relative z-20">
-                            You will receive the details for the class on
+                            You will receive the details for the class on your registered
                             <br className="hidden sm:block" />
                             your registered email and on WhatsApp.
                           </p>
@@ -273,6 +276,7 @@ const CongratsScreen = ({ dashboardData }) => {
                     className="w-[250px] xs:w-[300px] sm:w-[400px] md:w-[500px] lg:w-[600px] h-auto relative z-20"
                     style={{
                       filter: "drop-shadow(0 8px 20px rgba(0,0,0,0.08))",
+                      transform: "rotate(8deg)"
                     }}
                   />
                 </div>
