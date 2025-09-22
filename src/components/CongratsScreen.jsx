@@ -8,10 +8,11 @@ const CongratsScreen = ({ dashboardData }) => {
   const { date, time } = parseStartTime(dashboardData?.start_time_cx);
 
   // Determine the schedule text based on parameter type
-  const scheduleText =
-    dashboardData?.parameterType === "jet_id"
-      ? "Your next class is scheduled for:"
-      : "Your class has been scheduled for:";
+  const scheduleText = dashboardData?.isGeneric
+    ? "Are you all set to start an exciting adventure into"
+    : dashboardData?.parameterType === "jet_id"
+    ? "Your next class is scheduled for:"
+    : "Your class has been scheduled for:";
 
   // Check if the class date is today
   const isToday = () => {
@@ -92,32 +93,37 @@ const CongratsScreen = ({ dashboardData }) => {
           {/* Class Schedule Section */}
           <div className="text-center mb-8">
             <p className="text-base text-gray-600 mb-4">{scheduleText}</p>
-
-            <div className="flex items-center justify-center gap-4 mb-4">
-              <div className="text-center">
-                <div className="text-lg font-bold text-blue-500 mb-1">
-                  {date}
+            {!dashboardData?.isGeneric && (
+              <>
+                <div className="flex items-center justify-center gap-4 mb-4">
+                  <div className="text-center">
+                    <div className="text-lg font-bold text-blue-500 mb-1">
+                      {date}
+                    </div>
+                    <div className="text-lg font-bold text-blue-500">
+                      {time}
+                    </div>
+                  </div>
+                  <button
+                    onClick={handleJoinNow}
+                    disabled={!isJoinButtonActive}
+                    className={`px-6 py-2 rounded-full font-semibold text-sm transition-colors ${
+                      isJoinButtonActive
+                        ? "bg-blue-500 hover:bg-blue-600 text-white cursor-pointer"
+                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    }`}
+                  >
+                    Join Now
+                  </button>
                 </div>
-                <div className="text-lg font-bold text-blue-500">{time}</div>
-              </div>
-              <button
-                onClick={handleJoinNow}
-                disabled={!isJoinButtonActive}
-                className={`px-6 py-2 rounded-full font-semibold text-sm transition-colors ${
-                  isJoinButtonActive
-                    ? "bg-blue-500 hover:bg-blue-600 text-white cursor-pointer"
-                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                }`}
-              >
-                Join Now
-              </button>
-            </div>
 
-            <p className="text-sm text-gray-500">
-              You will receive the details for the class on your registered
-              <br />
-              email and on WhatsApp.
-            </p>
+                <p className="text-sm text-gray-500">
+                  You will receive the details for the class on your registered
+                  <br />
+                  email and on WhatsApp.
+                </p>
+              </>
+            )}
           </div>
 
           {/* Invite Friends Section */}
@@ -178,34 +184,38 @@ const CongratsScreen = ({ dashboardData }) => {
                         {scheduleText}
                       </p>
 
-                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 xs:gap-4 sm:gap-8 mb-3 xs:mb-4 sm:mb-6 relative z-20">
-                        <div className="flex flex-col">
-                          <div className="text-lg xs:text-xl sm:text-2xl font-bold text-blue-500 mb-1 xs:mb-2">
-                            {date}
+                      {!dashboardData?.isGeneric && (
+                        <>
+                          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 xs:gap-4 sm:gap-8 mb-3 xs:mb-4 sm:mb-6 relative z-20">
+                            <div className="flex flex-col">
+                              <div className="text-lg xs:text-xl sm:text-2xl font-bold text-blue-500 mb-1 xs:mb-2">
+                                {date}
+                              </div>
+                              <div className="text-lg xs:text-xl sm:text-2xl font-bold text-blue-500">
+                                {time}
+                              </div>
+                            </div>
+                            <button
+                              onClick={handleJoinNow}
+                              disabled={!isJoinButtonActive}
+                              className={`px-4 xs:px-6 sm:px-8 py-2 xs:py-2 sm:py-3 rounded-full font-semibold text-sm xs:text-base sm:text-lg transition-colors w-full sm:w-auto relative z-20 ${
+                                isJoinButtonActive
+                                  ? "bg-blue-500 hover:bg-blue-600 text-white cursor-pointer"
+                                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                              }`}
+                            >
+                              Join Now
+                            </button>
                           </div>
-                          <div className="text-lg xs:text-xl sm:text-2xl font-bold text-blue-500">
-                            {time}
-                          </div>
-                        </div>
-                        <button
-                          onClick={handleJoinNow}
-                          disabled={!isJoinButtonActive}
-                          className={`px-4 xs:px-6 sm:px-8 py-2 xs:py-2 sm:py-3 rounded-full font-semibold text-sm xs:text-base sm:text-lg transition-colors w-full sm:w-auto relative z-20 ${
-                            isJoinButtonActive
-                              ? "bg-blue-500 hover:bg-blue-600 text-white cursor-pointer"
-                              : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                          }`}
-                        >
-                          Join Now
-                        </button>
-                      </div>
 
-                      <p className="text-sm sm:text-base text-gray-500 relative z-20">
-                        You will receive the details for the class on your
-                        registered
-                        <br className="hidden sm:block" />
-                        email and on WhatsApp.
-                      </p>
+                          <p className="text-sm sm:text-base text-gray-500 relative z-20">
+                            You will receive the details for the class on your
+                            registered
+                            <br className="hidden sm:block" />
+                            email and on WhatsApp.
+                          </p>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>

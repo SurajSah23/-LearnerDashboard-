@@ -18,7 +18,16 @@ function App() {
         const { jetId, uuid } = getUrlParams();
 
         if (!jetId && !uuid) {
-          throw new Error("No jet_id or uuid parameter found in URL");
+          // No parameters provided - show generic welcome message
+          const genericData = {
+            student_name: "Student", // Generic name
+            parameterType: "none", // No specific parameter type
+            start_time_cx: null, // No specific date/time
+            zoom_link: null, // No zoom link
+            isGeneric: true, // Flag to indicate this is a generic message
+          };
+          setDashboardData(genericData);
+          return;
         }
 
         // Fetch dashboard data
@@ -29,6 +38,7 @@ function App() {
           ...data,
           student_name: data.child_name, // Map child_name to student_name for component
           parameterType: jetId ? "jet_id" : "uuid", // Track which parameter was used
+          isGeneric: false, // Flag to indicate this is real data
         };
 
         setDashboardData(processedData);
