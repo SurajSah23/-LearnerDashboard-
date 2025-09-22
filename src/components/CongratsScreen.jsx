@@ -72,32 +72,29 @@ const CongratsScreen = () => {
           </div>
 
           {/* Invite Friends Section */}
-          <div className="bg-gradient-to-r from-teal-500 to-green-400 rounded-xl p-6 mb-8 relative overflow-hidden">
+          <div className="bg-gradient-to-r from-teal-500 to-green-400 rounded-lg p-3 mb-4 relative overflow-hidden">
             <div className="flex items-center justify-between">
               <div className="flex-1">
-                <h3 className="text-white text-xl font-bold mb-4">
-                  Invite friends, win rewards
+                <h3 className="text-white text-base font-bold mb-2">
+                  Invite friends,<br />
+                  win rewards
                 </h3>
                 
                 <input
                   type="email"
                   placeholder="Enter Email to Invite"
-                  className="px-4 py-3 rounded-lg font-medium text-sm bg-white w-full"
+                  className="px-2 py-1.5 rounded font-medium text-xs bg-white w-full"
                 />
               </div>
               
               {/* Original Prize Images */}
-              <div className="ml-4 flex flex-col items-center">
+              <div className="ml-3 flex flex-col items-center">
                 <img 
                   src="https://cdn.prod.website-files.com/61f64598c68d4ab53ecff616/68bfd8f40c201171a65eff34_Referral%20Website%20Multi-Design%20(7).png"
                   alt="Referral design decoration"
-                  className="w-32 h-20 mb-2"
+                  className="w-40 h-36 mb-1"
                 />
                 
-                <button className="bg-yellow-400 text-black px-4 py-2 rounded-lg font-bold text-sm">
-                  Invite & Win<br />
-                  <span className="text-xs">Exciting Prizes</span>
-                </button>
               </div>
             </div>
           </div>
