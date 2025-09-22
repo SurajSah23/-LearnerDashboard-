@@ -49,32 +49,34 @@ const CongratsScreen = ({ dashboardData }) => {
         </div>
 
         {/* Mobile Layout */}
-        <div className="lg:hidden px-4 py-6">
+        <div className="lg:hidden px-3 py-4">
           {/* Main Heading - Centered */}
-          <div className="text-center mb-6">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">
+          <div className="text-center mb-4">
+            <h1 className="text-xl font-bold text-gray-900 mb-3">
               You are all set!
             </h1>
 
-            <p className="text-base text-gray-600 leading-relaxed">
+            <p className="text-sm text-gray-600 leading-relaxed mx-auto px-2">
               <span className="font-semibold text-gray-800">
                 {dashboardData?.student_name || "Emily"}
               </span>{" "}
-              is ready to start an exciting adventure into
+              is ready to start an exciting
               <br />
-              the world of tech with JetLearn.
+              adventure into the world of tech
+              <br />
+              with JetLearn.
             </p>
           </div>
 
           {/* Girl Illustration with Original Background */}
-          <div className="flex justify-center mb-8">
-            <div className="relative w-64 h-64">
+          <div className="flex justify-center mb-6">
+            <div className="relative w-48 h-48">
               {/* Girl Image */}
               <div className="relative z-10 flex justify-center items-center h-full">
                 <img
                   src="https://cdn.prod.website-files.com/61f64598c68d4ab53ecff616/67371c611162209f4eb93108_thank%20you%20hero%20image.avif"
                   alt="Happy girl with headphones celebrating"
-                  className="w-48 h-auto"
+                  className="w-36 h-auto"
                   style={{ filter: "drop-shadow(0 8px 20px rgba(0,0,0,0.08))" }}
                 />
               </div>
@@ -91,46 +93,49 @@ const CongratsScreen = ({ dashboardData }) => {
           </div>
 
           {/* Class Schedule Section */}
-          <div className="text-center mb-8">
-            <p className="text-base text-gray-600 mb-4">{scheduleText}</p>
+          <div className="mb-3 xs:mb-4">
+            <p className="text-xs text-gray-600 mb-2 px-2 text-center">{scheduleText}</p>
             {!dashboardData?.isGeneric && (
               <>
-                <div className="flex items-center justify-center gap-4 mb-4">
-                  <div className="text-center">
-                    <div className="text-lg font-bold text-blue-500 mb-1">
+                <div className="flex items-center justify-center space-x-2 font-sans mx-auto px-3 py-2 rounded-lg max-w-sm">
+                  {/* Left Section */}
+                  <div className="flex flex-col">
+                    <span className="text-[#00A0DF] font-semibold text-[14px] leading-[18px] tracking-tight">
                       {date}
-                    </div>
-                    <div className="text-lg font-bold text-blue-500">
+                    </span>
+                    <span className="text-[#00A0DF] font-semibold text-[14px] leading-[18px] tracking-tight">
                       {time}
-                    </div>
+                    </span>
                   </div>
+
+                  {/* Right Section - Button */}
                   <button
                     onClick={handleJoinNow}
                     disabled={!isJoinButtonActive}
-                    className={`px-6 py-2 rounded-full font-semibold text-sm transition-colors ${
+                    className={`text-[12px] font-medium px-3 py-1.5 rounded-full transition-colors ${
                       isJoinButtonActive
                         ? "bg-blue-500 hover:bg-blue-600 text-white cursor-pointer"
-                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        : "bg-[#E0E0E0] text-[#999999] cursor-not-allowed"
                     }`}
                   >
                     Join Now
                   </button>
                 </div>
 
-                <p className="text-sm text-gray-500">
-                  You will receive the details for the class on your registered
+                <p className="text-xs text-gray-500 px-2 text-center">
+                  You will receive the details for the class on
                   <br />
-                  email and on WhatsApp.
+                  your registered email and on WhatsApp.
                 </p>
               </>
             )}
           </div>
 
           {/* Invite Friends Section */}
-          <div className="bg-gradient-to-r from-teal-500 to-green-400 rounded-lg p-3 mb-4 relative overflow-hidden">
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <h3 className="text-white text-base font-bold mb-2">
+          <div className="bg-gradient-to-r from-teal-500 to-green-400 rounded-lg p-2 mb-4 relative overflow-hidden max-w-sm mx-auto">
+            <div className="flex items-start justify-between">
+              <div className="flex-1 pr-2">
+                <h3 className="text-white text-sm font-bold mb-2">
                   Invite friends,
                   <br />
                   win rewards
@@ -139,16 +144,16 @@ const CongratsScreen = ({ dashboardData }) => {
                 <input
                   type="email"
                   placeholder="Enter Email to Invite"
-                  className="px-2 py-1.5 rounded font-medium text-xs bg-white w-full max-w-[200px]"
+                  className="px-2 py-1.5 rounded font-medium text-xs bg-white w-full max-w-[180px]"
                 />
               </div>
 
               {/* Original Prize Images */}
-              <div className="ml-3 flex flex-col items-center">
+              <div className="flex-shrink-0">
                 <img
                   src="https://cdn.prod.website-files.com/61f64598c68d4ab53ecff616/68bfd8f40c201171a65eff34_Referral%20Website%20Multi-Design%20(7).png"
                   alt="Referral design decoration"
-                  className="w-40 h-36 object-contain"
+                  className="w-32 h-28 object-contain"
                 />
               </div>
             </div>
@@ -209,10 +214,9 @@ const CongratsScreen = ({ dashboardData }) => {
                           </div>
 
                           <p className="text-sm sm:text-base text-gray-500 relative z-20">
-                            You will receive the details for the class on your
-                            registered
+                            You will receive the details for the class on
                             <br className="hidden sm:block" />
-                            email and on WhatsApp.
+                            your registered email and on WhatsApp.
                           </p>
                         </>
                       )}
@@ -228,29 +232,29 @@ const CongratsScreen = ({ dashboardData }) => {
             </div>
 
             {/* Invite Friends Section */}
-            <div className="bg-gradient-to-r from-blue-400 via-blue-400 to-green-500 rounded-xl xs:rounded-2xl p-4 xs:p-6 sm:p-8 relative overflow-hidden lg:p-12">
+            <div className="bg-gradient-to-r from-blue-400 via-blue-400 to-green-500 rounded-xl xs:rounded-2xl p-3 xs:p-4 sm:p-6 relative overflow-hidden lg:p-8 max-w-lg">
               <div className="relative z-10">
-                <h3 className="text-white text-xl xs:text-2xl sm:text-3xl font-bold mb-3 xs:mb-4">
+                <h3 className="text-white text-lg xs:text-xl sm:text-2xl font-bold mb-3 xs:mb-4">
                   Invite friends,
                   <br />
                   win rewards
                 </h3>
 
-                <div className="mt-4 xs:mt-6">
+                <div className="mt-3 xs:mt-4">
                   <input
                     type="email"
                     placeholder="Enter Email to Invite"
-                    className="px-3 xs:px-3 sm:px-3 py-2 xs:py-2 sm:py-2.5 rounded-lg font-medium text-sm xs:text-sm sm:text-sm bg-white w-full sm:w-auto min-w-0 sm:min-w-[200px] max-w-[220px]"
+                    className="px-3 xs:px-3 sm:px-3 py-2 xs:py-2 sm:py-2.5 rounded-lg font-medium text-sm xs:text-sm sm:text-sm bg-white w-full sm:w-auto min-w-0 sm:min-w-[160px] max-w-[180px]"
                   />
                 </div>
               </div>
 
               {/* Decorative elements - Referral Design */}
-              <div className="absolute right-1 xs:right-2 sm:right-4 top-1 xs:top-2 sm:top-4">
+              <div className="absolute right-1 xs:right-2 sm:right-3 top-1 xs:top-2 sm:top-3">
                 <img
                   src="https://cdn.prod.website-files.com/61f64598c68d4ab53ecff616/68bfd8f40c201171a65eff34_Referral%20Website%20Multi-Design%20(7).png"
                   alt="Referral design decoration"
-                  className="w-32 h-20 xs:w-40 xs:h-28 sm:w-60 sm:h-40 md:w-72 md:h-52 -translate-y-1 xs:-translate-y-2 sm:-translate-y-4 opacity-60 xs:opacity-80 sm:opacity-100 object-contain"
+                  className="w-32 h-24 xs:w-36 xs:h-28 sm:w-48 sm:h-36 md:w-56 md:h-44 -translate-y-1 xs:-translate-y-2 sm:-translate-y-3 opacity-60 xs:opacity-80 sm:opacity-100 object-contain"
                 />
               </div>
             </div>
