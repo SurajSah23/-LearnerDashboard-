@@ -83,7 +83,7 @@ const CongratsScreen = () => {
                 <input
                   type="email"
                   placeholder="Enter Email to Invite"
-                  className="px-2 py-1.5 rounded font-medium text-xs bg-white w-full"
+                  className="px-2 py-1.5 rounded font-medium text-xs bg-white w-full max-w-[200px]"
                 />
               </div>
               
@@ -92,7 +92,7 @@ const CongratsScreen = () => {
                 <img 
                   src="https://cdn.prod.website-files.com/61f64598c68d4ab53ecff616/68bfd8f40c201171a65eff34_Referral%20Website%20Multi-Design%20(7).png"
                   alt="Referral design decoration"
-                  className="w-40 h-36 mb-1"
+                  className="w-40 h-36 object-contain"
                 />
                 
               </div>
@@ -152,7 +152,7 @@ const CongratsScreen = () => {
             </div>
 
             {/* Invite Friends Section */}
-            <div className="bg-gradient-to-r from-blue-400 via-blue-400 to-green-500 rounded-xl xs:rounded-2xl p-4 xs:p-6 sm:p-8 relative overflow-hidden">
+            <div className="bg-gradient-to-r from-blue-400 via-blue-400 to-green-500 rounded-xl xs:rounded-2xl p-4 xs:p-6 sm:p-8 relative overflow-hidden lg:p-12">
               <div className="relative z-10">
                 <h3 className="text-white text-xl xs:text-2xl sm:text-3xl font-bold mb-3 xs:mb-4">
                   Invite friends,<br />
@@ -163,7 +163,7 @@ const CongratsScreen = () => {
                   <input
                     type="email"
                     placeholder="Enter Email to Invite"
-                    className="px-3 xs:px-4 sm:px-5 py-2 xs:py-3 sm:py-4 rounded-lg font-medium text-sm xs:text-base sm:text-lg bg-white w-full sm:w-auto min-w-0 sm:min-w-[300px]"
+                    className="px-3 xs:px-3 sm:px-3 py-2 xs:py-2 sm:py-2.5 rounded-lg font-medium text-sm xs:text-sm sm:text-sm bg-white w-full sm:w-auto min-w-0 sm:min-w-[200px] max-w-[220px]"
                   />
                 </div>
               </div>
@@ -173,7 +173,7 @@ const CongratsScreen = () => {
                 <img 
                   src="https://cdn.prod.website-files.com/61f64598c68d4ab53ecff616/68bfd8f40c201171a65eff34_Referral%20Website%20Multi-Design%20(7).png"
                   alt="Referral design decoration"
-                  className="w-32 h-20 xs:w-40 xs:h-28 sm:w-60 sm:h-40 md:w-72 md:h-52 -translate-y-1 xs:-translate-y-2 sm:-translate-y-4 opacity-60 xs:opacity-80 sm:opacity-100"
+                  className="w-32 h-20 xs:w-40 xs:h-28 sm:w-60 sm:h-40 md:w-72 md:h-52 -translate-y-1 xs:-translate-y-2 sm:-translate-y-4 opacity-60 xs:opacity-80 sm:opacity-100 object-contain"
                 />
               </div>
             </div>
