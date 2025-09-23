@@ -23,7 +23,6 @@ export const fetchDashboardData = async (jetId = null, uuid = null) => {
 
     const response = await fetch(url, {
       method: "GET",
-      
     });
 
     if (!response.ok) {
@@ -63,14 +62,10 @@ export const parseStartTime = (startTimeCx) => {
     // Handle the specific format: "DD-MM-YYYY, HH:MM:SS AM/PM TIMEZONE"
     let date;
 
-    // Try parsing as-is first
-    date = new Date(startTimeCx);
-    console.log("First parse attempt:", date, "Valid:", !isNaN(date.getTime()));
-
     // Always try parsing the specific format to extract timezone
     console.log("Trying specific format parsing");
 
-    // Parse format: "26-09-2025, 04:00:00 PM CEST"
+    // Parse format: "04-10-2025, 01:00:00 PM EDT" (DD-MM-YYYY format)
     const match = startTimeCx.match(
       /(\d{1,2})-(\d{1,2})-(\d{4}),\s*(\d{1,2}):(\d{2}):(\d{2})\s*(AM|PM)\s*(.+)/
     );
@@ -94,13 +89,8 @@ export const parseStartTime = (startTimeCx) => {
         "0"
       )}T${hour24.toString().padStart(2, "0")}:${minute}:${second}`;
 
-      // Try to parse the original string first to preserve timezone
-      date = new Date(startTimeCx);
-
-      // If that fails, try with ISO string
-      if (isNaN(date.getTime())) {
-        date = new Date(isoString);
-      }
+      // Use the ISO string to avoid MM-DD-YYYY parsing issues
+      date = new Date(isoString);
 
       // Store the timezone for later use
       date._originalTimezone = timezone;

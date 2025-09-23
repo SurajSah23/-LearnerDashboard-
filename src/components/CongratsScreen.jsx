@@ -19,7 +19,7 @@ const CongratsScreen = ({ dashboardData }) => {
     : "Your class has been scheduled for:";
 
   // Check if the class date is today (using UTC start_time for accurate comparison)
-  const isToday = () => {
+  const isToday = useCallback(() => {
     if (!dashboardData?.start_time) return false;
 
     try {
@@ -32,7 +32,7 @@ const CongratsScreen = ({ dashboardData }) => {
       console.error("Error checking if date is today:", error);
       return false;
     }
-  };
+  }, [dashboardData?.start_time]);
 
   // Calculate time until class starts (using UTC start_time for accurate calculation)
   const calculateTimeUntilClass = useCallback(() => {
@@ -144,24 +144,10 @@ const CongratsScreen = ({ dashboardData }) => {
   const buttonText = useMemo(() => {
     if (classHasEnded) {
       return "Class Ended";
-    } else if (timeCalculations.hasClassStarted) {
-      return "Join Now";
-    } else if (timeCalculations.isWithinFiveMinutes) {
-      const timeDiff = timeCalculations.timeDiff;
-      if (timeDiff === null) return "Join Now";
-
-      const minutes = Math.floor(timeDiff / 60000);
-      const seconds = Math.floor((timeDiff % 60000) / 1000);
-
-      if (minutes > 0) {
-        return `Join Now (${minutes}m ${seconds}s)`;
-      } else {
-        return `Join Now (${seconds}s)`;
-      }
     } else {
       return "Join Now";
     }
-  }, [timeCalculations, classHasEnded]);
+  }, [classHasEnded]);
 
   // Log class timing and button status
   console.log("=== CLASS TIMING STATUS ===");
@@ -183,6 +169,11 @@ const CongratsScreen = ({ dashboardData }) => {
   console.log("Current time (local):", new Date().toString());
   console.log("Button should be active:", isJoinButtonActive);
   console.log("Button text:", buttonText);
+  console.log("Is today:", isToday());
+  console.log("Is within 5 minutes:", isWithinFiveMinutes());
+  console.log("Has class started:", hasClassStarted());
+  console.log("Class has ended:", classHasEnded);
+  console.log("Time calculations:", timeCalculations);
   console.log("==========================");
 
   // Handle Join Now button click
