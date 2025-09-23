@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Header from "./Header";
 import { MdMessage } from "react-icons/md";
 import { parseStartTime } from "../services/api";
@@ -7,6 +7,10 @@ const CongratsScreen = ({ dashboardData }) => {
   // Parse start_time_cx to get formatted date and time
   const { date, time } = parseStartTime(dashboardData?.start_time_cx);
 
+  // State for tracking button status
+  const [isAutoRedirected, setIsAutoRedirected] = useState(false);
+  const [classHasEnded, setClassHasEnded] = useState(false);
+
   // Determine the schedule text based on parameter type
   const scheduleText = dashboardData?.isGeneric
     ? "Are you all set to start an exciting adventure into"
@@ -14,12 +18,12 @@ const CongratsScreen = ({ dashboardData }) => {
     ? "Your next class is scheduled for:"
     : "Your class has been scheduled for:";
 
-  // Check if the class date is today
+  // Check if the class date is today (using UTC start_time for accurate comparison)
   const isToday = () => {
-    if (!dashboardData?.start_time_cx) return false;
+    if (!dashboardData?.start_time) return false;
 
     try {
-      const classDate = new Date(dashboardData.start_time_cx);
+      const classDate = new Date(dashboardData.start_time);
       const today = new Date();
 
       // Compare dates (ignore time)
@@ -30,8 +34,156 @@ const CongratsScreen = ({ dashboardData }) => {
     }
   };
 
+  // Calculate time until class starts (using UTC start_time for accurate calculation)
+  const calculateTimeUntilClass = useCallback(() => {
+    if (!dashboardData?.start_time) return null;
+
+    try {
+      const classDate = new Date(dashboardData.start_time);
+      const now = new Date();
+      const timeDiff = classDate.getTime() - now.getTime();
+
+      return timeDiff; // Returns milliseconds until class
+    } catch (error) {
+      console.error("Error calculating time until class:", error);
+      return null;
+    }
+  }, [dashboardData?.start_time]);
+
+  // Memoized time calculations to prevent unnecessary recalculations
+  const timeCalculations = useMemo(() => {
+    const timeDiff = calculateTimeUntilClass();
+    return {
+      timeDiff,
+      isWithinFiveMinutes:
+        timeDiff !== null && timeDiff <= 300000 && timeDiff > 0,
+      hasClassStarted: timeDiff !== null && timeDiff <= 0,
+    };
+  }, [calculateTimeUntilClass]);
+
+  // Check if class is within 5 minutes (300,000 milliseconds)
+  const isWithinFiveMinutes = () => timeCalculations.isWithinFiveMinutes;
+
+  // Check if class has started (time is negative)
+  const hasClassStarted = () => timeCalculations.hasClassStarted;
+
+  // Update time with smart intervals
+  useEffect(() => {
+    if (!dashboardData?.start_time) return;
+
+    const calculateTimeUntilClassLocal = () => {
+      try {
+        const classDate = new Date(dashboardData.start_time);
+        const now = new Date();
+        const timeDiff = classDate.getTime() - now.getTime();
+
+        return timeDiff; // Returns milliseconds until class
+      } catch (error) {
+        console.error("Error calculating time until class:", error);
+        return null;
+      }
+    };
+
+    const handleAutoRedirectLocal = () => {
+      const timeDiff = calculateTimeUntilClassLocal();
+      if (
+        timeDiff !== null &&
+        timeDiff <= 0 &&
+        dashboardData?.zoom_link &&
+        !isAutoRedirected
+      ) {
+        setIsAutoRedirected(true);
+        window.open(dashboardData.zoom_link, "_blank", "noopener,noreferrer");
+      }
+    };
+
+    const checkClassEnded = () => {
+      if (!dashboardData?.end_time) return false;
+      try {
+        const endDate = new Date(dashboardData.end_time);
+        const now = new Date();
+        const hasEnded = now.getTime() > endDate.getTime();
+
+        return hasEnded;
+      } catch (error) {
+        console.error("Error checking if class has ended:", error);
+        return false;
+      }
+    };
+
+    // Initial calculation
+    const initialClassEnded = checkClassEnded();
+    setClassHasEnded(initialClassEnded);
+    handleAutoRedirectLocal();
+
+    let timer = setInterval(() => {
+      calculateTimeUntilClassLocal();
+      const classEnded = checkClassEnded();
+      setClassHasEnded(classEnded);
+      handleAutoRedirectLocal();
+    }, 60000); // Always 1 minute
+
+    return () => clearInterval(timer);
+  }, [
+    dashboardData?.start_time,
+    dashboardData?.end_time,
+    dashboardData?.zoom_link,
+    isAutoRedirected,
+    classHasEnded,
+  ]);
+
   // Check if Join Now button should be active
-  const isJoinButtonActive = dashboardData?.zoom_link && isToday();
+  // Button is active if: has zoom link, is today, either within 5 minutes OR class has started, AND class has not ended
+  const isJoinButtonActive =
+    dashboardData?.zoom_link &&
+    isToday() &&
+    (isWithinFiveMinutes() || hasClassStarted()) &&
+    !classHasEnded;
+
+  // Memoized button text to prevent unnecessary recalculations
+  const buttonText = useMemo(() => {
+    if (classHasEnded) {
+      return "Class Ended";
+    } else if (timeCalculations.hasClassStarted) {
+      return "Join Now";
+    } else if (timeCalculations.isWithinFiveMinutes) {
+      const timeDiff = timeCalculations.timeDiff;
+      if (timeDiff === null) return "Join Now";
+
+      const minutes = Math.floor(timeDiff / 60000);
+      const seconds = Math.floor((timeDiff % 60000) / 1000);
+
+      if (minutes > 0) {
+        return `Join Now (${minutes}m ${seconds}s)`;
+      } else {
+        return `Join Now (${seconds}s)`;
+      }
+    } else {
+      return "Join Now";
+    }
+  }, [timeCalculations, classHasEnded]);
+
+  // Log class timing and button status
+  console.log("=== CLASS TIMING STATUS ===");
+  console.log("Class start time (UTC):", dashboardData?.start_time);
+  console.log("Class end time (UTC):", dashboardData?.end_time);
+  console.log(
+    "Class start time (local):",
+    dashboardData?.start_time
+      ? new Date(dashboardData.start_time).toString()
+      : "N/A"
+  );
+  console.log(
+    "Class end time (local):",
+    dashboardData?.end_time
+      ? new Date(dashboardData.end_time).toString()
+      : "N/A"
+  );
+  console.log("Current time (UTC):", new Date().toISOString());
+  console.log("Current time (local):", new Date().toString());
+  console.log("Button should be active:", isJoinButtonActive);
+  console.log("Button text:", buttonText);
+  console.log("==========================");
 
   // Handle Join Now button click
   const handleJoinNow = () => {
@@ -77,9 +229,9 @@ const CongratsScreen = ({ dashboardData }) => {
                   src="https://cdn.prod.website-files.com/61f64598c68d4ab53ecff616/67371c611162209f4eb93108_thank%20you%20hero%20image.avif"
                   alt="Happy girl with headphones celebrating"
                   className="w-36 h-auto"
-                  style={{ 
+                  style={{
                     filter: "drop-shadow(0 8px 20px rgba(0,0,0,0.08))",
-                    transform: "rotate(8deg)"
+                    transform: "rotate(8deg)",
                   }}
                 />
               </div>
@@ -97,7 +249,9 @@ const CongratsScreen = ({ dashboardData }) => {
 
           {/* Class Schedule Section */}
           <div className="mb-3 xs:mb-4">
-            <p className="text-xs text-gray-600 mb-2 px-2 text-center">{scheduleText}</p>
+            <p className="text-xs text-gray-600 mb-2 px-2 text-center">
+              {scheduleText}
+            </p>
             {!dashboardData?.isGeneric && (
               <>
                 <div className="flex items-center justify-center space-x-2 font-sans mx-auto px-3 py-2 rounded-lg max-w-sm">
@@ -121,7 +275,7 @@ const CongratsScreen = ({ dashboardData }) => {
                         : "bg-[#E0E0E0] text-[#999999] cursor-not-allowed"
                     }`}
                   >
-                    Join Now
+                    {buttonText}
                   </button>
                 </div>
 
@@ -212,12 +366,13 @@ const CongratsScreen = ({ dashboardData }) => {
                                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
                               }`}
                             >
-                              Join Now
+                              {buttonText}
                             </button>
                           </div>
 
                           <p className="text-sm sm:text-base text-gray-500 relative z-20">
-                            You will receive the details for the class on your registered
+                            You will receive the details for the class on your
+                            registered
                             <br className="hidden sm:block" />
                             your registered email and on WhatsApp.
                           </p>
@@ -276,7 +431,7 @@ const CongratsScreen = ({ dashboardData }) => {
                     className="w-[250px] xs:w-[300px] sm:w-[400px] md:w-[500px] lg:w-[600px] h-auto relative z-20"
                     style={{
                       filter: "drop-shadow(0 8px 20px rgba(0,0,0,0.08))",
-                      transform: "rotate(8deg)"
+                      transform: "rotate(8deg)",
                     }}
                   />
                 </div>
