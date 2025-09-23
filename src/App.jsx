@@ -29,7 +29,6 @@ function App() {
           setDashboardData(genericData);
           return;
         }
-
         // Fetch dashboard data
         const data = await fetchDashboardData(jetId, uuid);
 
