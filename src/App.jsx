@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import CongratsScreen from "./components/CongratsScreen";
+import TrialClassPrep from "./components/TrialClassPrep";
+import JetLearnBenefits from "./components/JetLearnBenefits";
+import JetLearnFooter from "./components/JetLearnFooter";
 import { fetchDashboardData, getUrlParams } from "./services/api";
 // import SignupScreen from './components/SignupScreen';
 
@@ -86,8 +89,13 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen">
-      <CongratsScreen dashboardData={dashboardData} />
+    <div className="min-h-screen flex flex-col">
+      <div className="flex-1">
+        <CongratsScreen dashboardData={dashboardData} />
+      </div>
+      <TrialClassPrep />
+      <JetLearnBenefits />
+      <JetLearnFooter />
     </div>
   );
 }
