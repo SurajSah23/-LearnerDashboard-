@@ -1,4 +1,4 @@
-const API_BASE_URL = "/api/dashboard/";
+const API_BASE_URL = "https://live.jetlearn.com/api/dashboard/";
 
 /**
  * Fetch dashboard data using jet_id or uuid
