@@ -86,9 +86,10 @@ const CongratsScreen = ({ dashboardData }) => {
 
     const handleAutoRedirectLocal = () => {
       const timeDiff = calculateTimeUntilClassLocal();
+      // Auto-redirect exactly when it's time for the class (when class starts)
       if (
         timeDiff !== null &&
-        timeDiff <= 0 &&
+        timeDiff <= 0 && // Exactly when class starts
         dashboardData?.zoom_link &&
         !isAutoRedirected
       ) {
