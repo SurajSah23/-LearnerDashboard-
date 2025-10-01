@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Header from "./Header";
 import { MdMessage } from "react-icons/md";
-import { parseStartTime } from "../services/api";
+import { parseStartTime, sendJoinTrigger, getUrlParams } from "../services/api";
 
 const CongratsScreen = ({ dashboardData }) => {
   // Parse start_time_cx to get formatted date and time
@@ -178,8 +178,22 @@ const CongratsScreen = ({ dashboardData }) => {
   console.log("==========================");
 
   // Handle Join Now button click
-  const handleJoinNow = () => {
+  const handleJoinNow = async () => {
     if (isJoinButtonActive && dashboardData?.zoom_link) {
+      try {
+        // Get jet_id from URL params
+        const { jetId } = getUrlParams();
+
+        // Send join trigger to API
+        if (jetId) {
+          await sendJoinTrigger(jetId);
+        }
+      } catch (error) {
+        console.error("Error sending join trigger:", error);
+        // Continue to open zoom link even if API call fails
+      }
+
+      // Open zoom link
       window.open(dashboardData.zoom_link, "_blank", "noopener,noreferrer");
     }
   };

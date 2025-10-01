@@ -281,3 +281,38 @@ export const sendBrowserDataToBackend = async (
     throw error;
   }
 };
+
+/**
+ * Send join class trigger to the backend
+ * @param {string} jetId - The jet_id parameter
+ * @returns {Promise<Object>} - The response from the server
+ */
+export const sendJoinTrigger = async (jetId) => {
+  try {
+    console.log("Sending join trigger for learner:", jetId);
+
+    const url = `${API_BASE_URL}dashboard-visits/join/`;
+    const payload = {
+      learner_uid: jetId,
+    };
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log("Join trigger sent successfully:", data);
+    return data;
+  } catch (error) {
+    console.error("Error sending join trigger:", error);
+    throw error;
+  }
+};
