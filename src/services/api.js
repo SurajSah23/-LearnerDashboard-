@@ -11,6 +11,8 @@ export const fetchDashboardData = async (jetId = null, type = "trial") => {
     let url = `${API_BASE_URL}dashboard`;
     const params = new URLSearchParams();
 
+    console.log("fetchDashboardData called with:", { jetId, type });
+
     if (jetId) {
       params.append("jet_id", jetId);
     } else {
@@ -23,6 +25,9 @@ export const fetchDashboardData = async (jetId = null, type = "trial") => {
     }
 
     url += `?${params.toString()}`;
+
+    console.log("Final URL:", url);
+    console.log("URL params:", params.toString());
 
     const response = await fetch(url, {
       method: "GET",
