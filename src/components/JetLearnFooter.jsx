@@ -130,9 +130,9 @@ const JetLearnFooter = () => {
               </button>
               {expandedSections.courses && (
                 <ul className="mt-3 space-y-2">
-                  <li><a href="#" className="text-sm text-gray-600 hover:text-gray-800 transition-colors duration-200 block py-1">Python</a></li>
-                  <li><a href="#" className="text-sm text-gray-600 hover:text-gray-800 transition-colors duration-200 block py-1">Scratch</a></li>
-                  <li><a href="#" className="text-sm text-gray-600 hover:text-gray-800 transition-colors duration-200 block py-1">Roblox</a></li>
+                  <li><a href="#" className="text-sm text-gray-600 hover:text-gray-700 transition-colors duration-200 block py-1">Python</a></li>
+                  <li><a href="#" className="text-sm text-gray-600 hover:text-gray-700 transition-colors duration-200 block py-1">Scratch</a></li>
+                  <li><a href="#" className="text-sm text-gray-600 hover:text-gray-700 transition-colors duration-200 block py-1">Roblox</a></li>
                 </ul>
               )}
             </div>
