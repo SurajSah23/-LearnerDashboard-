@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://live.jetlearn.com/api/dashboard/";
+const API_BASE_URL = "https://live.jetlearn.com/api/";
 
 /**
  * Fetch dashboard data using jet_id or uuid
@@ -6,17 +6,20 @@ const API_BASE_URL = "https://live.jetlearn.com/api/dashboard/";
  * @param {string} uuid - The uuid parameter
  * @returns {Promise<Object>} - The dashboard data
  */
-export const fetchDashboardData = async (jetId = null, uuid = null) => {
+export const fetchDashboardData = async (jetId = null, type = "trial") => {
   try {
-    let url = API_BASE_URL;
+    let url = `${API_BASE_URL}dashboard`;
     const params = new URLSearchParams();
 
     if (jetId) {
       params.append("jet_id", jetId);
-    } else if (uuid) {
-      params.append("uuid", uuid);
     } else {
-      throw new Error("Either jet_id or uuid must be provided");
+      throw new Error("jet_id  must be provided");
+    }
+    if (type) {
+      params.append("type", type);
+    } else {
+      throw new Error("type must be provided");
     }
 
     url += `?${params.toString()}`;
@@ -215,7 +218,66 @@ export const parseStartTime = (startTimeCx) => {
 export const getUrlParams = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const jetId = urlParams.get("jet_id");
-  const uuid = urlParams.get("uuid");
+  const type = urlParams.get("type");
 
-  return { jetId, uuid };
+  return { jetId, type };
+};
+
+/**
+ * Send browser data to the backend
+ * @param {Object} browserData - The collected browser data
+ * @param {string} jetId - Optional jet_id parameter
+ * @param {string} uuid - Optional uuid parameter
+ * @returns {Promise<Object>} - The response from the server
+ */
+export const sendBrowserDataToBackend = async (
+  browserData,
+  jetId = null,
+  type = "trial"
+) => {
+  try {
+    console.log(
+      "Sending browser data to the backend",
+      browserData.browser.userAgent
+    );
+
+    const url = `${API_BASE_URL}dashboard-visits/`;
+    const payload = {
+      learner_uid: jetId,
+      user_agent: browserData.browser.userAgent,
+      browser_name: browserData.browser.browserName,
+      platform: browserData.browser.platform,
+      screen_width: browserData.screen.width,
+      screen_height: browserData.screen.height,
+      actual_width: browserData.screen.availWidth,
+      actual_height: browserData.screen.availHeight,
+      device_pixel_ratio: browserData.screen.devicePixelRatio,
+      timezone: browserData.timezone.timezone,
+      page_url: browserData.page.url,
+      internet_speed: browserData.network.connection.downlink,
+      internet_type: browserData.network.connection.effectiveType,
+      user_type: type || "trial",
+      joined_class: false,
+      ipAddress: browserData.ipAddress.publicIP,
+      timestamp: new Date().toISOString(),
+    };
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error sending browser data:", error);
+    throw error;
+  }
 };
