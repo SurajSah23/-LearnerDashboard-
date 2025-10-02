@@ -290,8 +290,8 @@ const JetLearnFooter = () => {
             
             {/* Terms and Privacy Links */}
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-8 text-center sm:text-left">
-              <a href="#" className="text-xs sm:text-sm text-gray-600 hover:text-gray-800 transition-colors duration-200">Terms & Conditions</a>
-              <a href="#" className="text-xs sm:text-sm text-gray-600 hover:text-gray-800 transition-colors duration-200">Privacy Policy</a>
+              <a href="https://cdn.prod.website-files.com/61f64598c68d4ab53ecff616/6352c547310233fbe8308cda_Terms%20and%20Conditions.pdf" target="_blank" rel="noopener noreferrer" className="text-xs sm:text-sm text-gray-600 hover:text-gray-800 transition-colors duration-200">Terms & Conditions</a>
+              <a href="https://cdn.prod.website-files.com/61f64598c68d4ab53ecff616/634cc68d8c5aff79760c961f_JetLearn%20Privacy%20Policy.pdf" target="_blank" rel="noopener noreferrer" className="text-xs sm:text-sm text-gray-600 hover:text-gray-800 transition-colors duration-200">Privacy Policy</a>
             </div>
             
             {/* Copyright */}
