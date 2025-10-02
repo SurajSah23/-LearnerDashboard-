@@ -85,7 +85,7 @@ export const parseStartTime = (startTimeCx) => {
   if (!startTimeCx || startTimeCx === null || startTimeCx === undefined) {
     console.log("start_time_cx is null/undefined, using default values");
     return {
-      date: "14 Dec, 2025",
+      date: "Sunday, 14 Dec, 2025",
       time: "8:30 - 9:30 AM EST",
     };
   }
@@ -161,15 +161,16 @@ export const parseStartTime = (startTimeCx) => {
     if (isNaN(date.getTime())) {
       console.error("Could not parse start_time_cx:", startTimeCx);
       return {
-        date: "14 Dec, 2025",
+        date: "Sunday, 14 Dec, 2025",
         time: "8:30 - 9:30 AM EST",
       };
     }
 
     console.log("Parsed date:", date);
 
-    // Format date as "DD MMM, YYYY"
+    // Format date as "Weekday, DD MMM, YYYY"
     const formattedDate = date.toLocaleDateString("en-US", {
+      weekday: "long",
       day: "numeric",
       month: "short",
       year: "numeric",
@@ -234,7 +235,7 @@ export const parseStartTime = (startTimeCx) => {
   } catch (error) {
     console.error("Error parsing start_time_cx:", error, "Value:", startTimeCx);
     return {
-      date: "14 Dec, 2025",
+      date: "Sunday, 14 Dec, 2025",
       time: "8:30 - 9:30 AM EST",
     };
   }

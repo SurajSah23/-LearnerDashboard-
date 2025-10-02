@@ -62,6 +62,7 @@ const CongratsScreen = ({ dashboardData }) => {
     tomorrow.setDate(tomorrow.getDate() + 1);
 
     const formattedDate = tomorrow.toLocaleDateString("en-US", {
+      weekday: "long",
       day: "numeric",
       month: "short",
       year: "numeric",
@@ -406,11 +407,16 @@ const CongratsScreen = ({ dashboardData }) => {
                 <div className="flex items-center justify-center space-x-2 font-sans mx-auto px-3 py-2 rounded-lg max-w-sm">
                   {/* Left Section */}
                   <div className="flex flex-col">
+                    {type === "event" && (
+                      <span className="text-gray-700 font-medium text-[13px] mb-1">
+                        Your Event Details
+                      </span>
+                    )}
                     <span className="text-[#00A0DF] font-semibold text-[14px] leading-[18px] tracking-tight">
-                      {date}
+                      Date: {date}
                     </span>
                     <span className="text-[#00A0DF] font-semibold text-[14px] leading-[18px] tracking-tight">
-                      {time}
+                      Time : {time}
                     </span>
                   </div>
 
