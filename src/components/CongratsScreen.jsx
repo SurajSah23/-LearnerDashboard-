@@ -395,7 +395,7 @@ const CongratsScreen = ({ dashboardData }) => {
                   className="inline-block"
                 >
                   <button className="px-4 py-2 rounded-lg font-semibold text-xs bg-white text-blue-600 hover:bg-gray-100 transition-all shadow-md cursor-pointer">
-                    Invite Friends, Win Rewards
+                  Grow together, unlock rewards
                   </button>
                 </a>
               </div>
@@ -501,7 +501,7 @@ const CongratsScreen = ({ dashboardData }) => {
                     className="inline-block"
                   >
                     <button className="px-6 py-2.5 rounded-lg font-semibold text-sm bg-white text-blue-600 hover:bg-gray-100 transition-all shadow-md hover:shadow-lg cursor-pointer">
-                      Invite Friends, Win Rewards
+                    Grow together, unlock rewards
                     </button>
                   </a>
                 </div>
