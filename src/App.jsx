@@ -245,12 +245,17 @@ function App() {
           ...data,
           student_name: data.child_name, // Map child_name to student_name for component
           parameterType: jetId ? "jet_id" : "uuid", // Track which parameter was used
-          isGeneric: false, // Flag to indicate this is real data
+          isGeneric: data.isGeneric !== undefined ? data.isGeneric : false, // Preserve isGeneric flag from API or set to false
         };
 
         setDashboardData(processedData);
 
         console.log("Dashboard data loaded:", processedData);
+        
+        // Log if error status was returned
+        if (data.status === "error") {
+          console.warn("API returned error, displaying basic page:", data.message);
+        }
       } catch (err) {
         console.error("Failed to load dashboard data:", err);
         setError(err.message);

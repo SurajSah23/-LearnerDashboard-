@@ -5,7 +5,7 @@ import { parseStartTime, sendJoinTrigger, getUrlParams } from "../services/api";
 
 const CongratsScreen = ({ dashboardData }) => {
   // Get type from URL params to determine which time field to use
-  const { type } = getUrlParams();
+  const { type, jetId } = getUrlParams();
 
   // Use event_start_time_cx if type is "event", otherwise use start_time_cx
   const startTimeCx =
@@ -13,8 +13,80 @@ const CongratsScreen = ({ dashboardData }) => {
       ? dashboardData?.event_start_time_cx
       : dashboardData?.start_time_cx;
 
+  // Determine zoom link - assign based on jet_id last char if type is event and zoom_link is null
+  const zoomLink = useMemo(() => {
+    // If zoom_link exists in dashboardData, use it
+    if (dashboardData?.zoom_link) {
+      console.log(
+        "Using zoom_link from dashboardData:",
+        dashboardData.zoom_link
+      );
+      return dashboardData.zoom_link;
+    }
+
+    // If type is event and zoom_link is null, assign based on jet_id last character
+    if (type === "event" && jetId) {
+      const lastChar = jetId.charAt(jetId.length - 1).toUpperCase();
+      if (lastChar === "C") {
+        console.log(
+          "Assigning zoom link for event (jet_id ends with C):",
+          "https://zoom.us/j/96605171912"
+        );
+        return "https://zoom.us/j/96605171912";
+      } else if (lastChar === "M") {
+        console.log(
+          "Assigning zoom link for event (jet_id ends with M):",
+          "https://zoom.us/j/96332836058"
+        );
+        return "https://zoom.us/j/96332836058";
+      }
+    }
+
+    // Return null if no conditions match
+    console.log("No zoom link assigned, returning null");
+    return dashboardData?.zoom_link || null;
+  }, [dashboardData?.zoom_link, type, jetId]);
+
+  // Assign zoom link to dashboardData if it's null
+  if (dashboardData && !dashboardData.zoom_link && zoomLink) {
+    dashboardData.zoom_link = zoomLink;
+    console.log("Assigned zoom_link to dashboardData:", zoomLink);
+  }
+
   // Parse start_time_cx to get formatted date and time
-  const { date, time } = parseStartTime(startTimeCx);
+  let parsedDateTime = parseStartTime(startTimeCx);
+
+  // If event_start_time_cx is null and type is event, set to next day 9:30 - 10:30 PM IST
+  if (type === "event" && !startTimeCx) {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const formattedDate = tomorrow.toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+
+    parsedDateTime = {
+      date: formattedDate,
+      time: "9:30 - 10:30 PM IST",
+    };
+
+    console.log(
+      "Event start time is null, using next day default:",
+      parsedDateTime
+    );
+  }
+
+  const { date, time } = parsedDateTime;
+
+  // Log the assigned zoom link
+  console.log("=== ZOOM LINK ASSIGNED ===");
+  console.log("Zoom Link:", zoomLink);
+  console.log("Type:", type);
+  console.log("Jet ID:", jetId);
+  console.log("Dashboard zoom_link:", dashboardData?.zoom_link);
+  console.log("==========================");
 
   // State for tracking button status
   const [isAutoRedirected, setIsAutoRedirected] = useState(false);
@@ -28,11 +100,8 @@ const CongratsScreen = ({ dashboardData }) => {
     : type === "paid"
     ? "Your next class is scheduled for"
     : type === "event"
-    ? "Your upcoming event"
+    ? "Your upcoming event is scheduled for"
     : "Your class has been scheduled for:";
-
-  // Additional text for event type
-  const scheduleTextSuffix = type === "event" ? "is scheduled for" : "";
 
   // Check if the class date is today (using UTC start_time for accurate comparison)
   const isToday = useCallback(() => {
@@ -106,11 +175,11 @@ const CongratsScreen = ({ dashboardData }) => {
       if (
         timeDiff !== null &&
         timeDiff <= 0 && // Exactly when class starts
-        dashboardData?.zoom_link &&
+        zoomLink &&
         !isAutoRedirected
       ) {
         setIsAutoRedirected(true);
-        window.open(dashboardData.zoom_link, "_blank", "noopener,noreferrer");
+        window.open(zoomLink, "_blank", "noopener,noreferrer");
       }
     };
 
@@ -144,7 +213,7 @@ const CongratsScreen = ({ dashboardData }) => {
   }, [
     dashboardData?.start_time,
     dashboardData?.end_time,
-    dashboardData?.zoom_link,
+    zoomLink,
     isAutoRedirected,
     classHasEnded,
   ]);
@@ -152,7 +221,7 @@ const CongratsScreen = ({ dashboardData }) => {
   // Check if Join Now button should be active
   // Button is active if: has zoom link, is today, either within 5 minutes OR class has started, AND class has not ended
   const isJoinButtonActive =
-    dashboardData?.zoom_link &&
+    zoomLink &&
     isToday() &&
     (isWithinFiveMinutes() || hasClassStarted()) &&
     !classHasEnded;
@@ -195,7 +264,7 @@ const CongratsScreen = ({ dashboardData }) => {
 
   // Handle Join Now button click
   const handleJoinNow = async () => {
-    if (isJoinButtonActive && dashboardData?.zoom_link) {
+    if (isJoinButtonActive && zoomLink) {
       try {
         // Get jet_id from URL params
         const { jetId } = getUrlParams();
@@ -210,7 +279,7 @@ const CongratsScreen = ({ dashboardData }) => {
       }
 
       // Open zoom link
-      window.open(dashboardData.zoom_link, "_blank", "noopener,noreferrer");
+      window.open(zoomLink, "_blank", "noopener,noreferrer");
     }
   };
 
@@ -273,15 +342,6 @@ const CongratsScreen = ({ dashboardData }) => {
           <div className="mb-3 xs:mb-4">
             <p className="text-xs text-gray-600 mb-2 px-2 text-center">
               {scheduleText}
-              {type === "event" && dashboardData?.event_name && (
-                <>
-                  {" "}
-                  <span className="text-blue-500 font-semibold">
-                    {dashboardData.event_name}
-                  </span>{" "}
-                  {scheduleTextSuffix}
-                </>
-              )}
             </p>
             {!dashboardData?.isGeneric && (
               <>
@@ -375,15 +435,6 @@ const CongratsScreen = ({ dashboardData }) => {
                     <div className="relative inline-block w-full">
                       <p className="text-base xs:text-lg sm:text-xl md:text-2xl font-semibold text-gray-800 mb-3 xs:mb-4 sm:mb-6 relative z-20">
                         {scheduleText}
-                        {type === "event" && dashboardData?.event_name && (
-                          <>
-                            {" "}
-                            <span className="text-blue-500 font-semibold">
-                              {dashboardData.event_name}
-                            </span>{" "}
-                            {scheduleTextSuffix}
-                          </>
-                        )}
                       </p>
 
                       {!dashboardData?.isGeneric && (

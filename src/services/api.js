@@ -38,10 +38,34 @@ export const fetchDashboardData = async (jetId = null, type = "trial") => {
     }
 
     const data = await response.json();
+    if (data.status === "error") {
+      console.warn("API returned error status:", data.message);
+      // Return basic page structure with no data
+      return {
+        status: "error",
+        message: data.message,
+        student_name: "Student",
+        child_name: "Student",
+        start_time_cx: null,
+        event_start_time_cx: null,
+        zoom_link: null,
+        isGeneric: true,
+      };
+    }
     return data;
   } catch (error) {
     console.error("Error fetching dashboard data:", error);
-    throw error;
+    // Return basic page structure for any error
+    return {
+      status: "error",
+      message: error.message || "An error occurred",
+      student_name: "Student",
+      child_name: "Student",
+      start_time_cx: null,
+      event_start_time_cx: null,
+      zoom_link: null,
+      isGeneric: true,
+    };
   }
 };
 
