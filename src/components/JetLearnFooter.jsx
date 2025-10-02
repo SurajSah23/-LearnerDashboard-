@@ -111,7 +111,7 @@ const JetLearnFooter = () => {
         </div>
 
         {/* Divider */}
-        <div className="border-t border-gray-200 mb-8 sm:mb-10 lg:mb-12"></div>
+        <div className="border-t border-gray-200 mb-8 sm:mb-10 lg:mb-12 hidden"></div>
 
         {/* Footer Links Section - Mobile Accordion / Desktop Grid */}
         <div className="block sm:hidden">
@@ -234,17 +234,17 @@ const JetLearnFooter = () => {
         <div className="hidden sm:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 lg:gap-12">
           
           {/* Courses Column */}
-          <div className="text-center sm:text-left">
+          {/* <div className="text-center sm:text-left">
             <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 sm:mb-6">Courses</h3>
             <ul className="space-y-2 sm:space-y-3 lg:space-y-4">
               <li><a href="#" className="text-sm sm:text-base text-gray-600 hover:text-gray-800 transition-colors duration-200 block py-1">Python</a></li>
               <li><a href="#" className="text-sm sm:text-base text-gray-600 hover:text-gray-800 transition-colors duration-200 block py-1">Scratch</a></li>
               <li><a href="#" className="text-sm sm:text-base text-gray-600 hover:text-gray-800 transition-colors duration-200 block py-1">Roblox</a></li>
             </ul>
-          </div>
+          </div> */}
 
           {/* About JetLearn Column */}
-          <div className="text-center sm:text-left">
+          {/* <div className="text-center sm:text-left">
             <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 sm:mb-6">About JetLearn</h3>
             <ul className="space-y-2 sm:space-y-3 lg:space-y-4">
               <li><a href="#" className="text-sm sm:text-base text-gray-600 hover:text-gray-800 transition-colors duration-200 block py-1">Why JetLearn</a></li>
@@ -255,10 +255,10 @@ const JetLearnFooter = () => {
               <li><a href="#" className="text-sm sm:text-base text-gray-600 hover:text-gray-800 transition-colors duration-200 block py-1">Refer & Earn</a></li>
               <li><a href="#" className="text-sm sm:text-base text-gray-600 hover:text-gray-800 transition-colors duration-200 block py-1">Download Brochure</a></li>
             </ul>
-          </div>
+          </div> */}
 
           {/* Programs Column */}
-          <div className="text-center sm:text-left">
+          {/* <div className="text-center sm:text-left">
             <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 sm:mb-6">Programs</h3>
             <ul className="space-y-2 sm:space-y-3 lg:space-y-4 mb-6 sm:mb-8">
               <li><a href="#" className="text-sm sm:text-base text-gray-600 hover:text-gray-800 transition-colors duration-200 block py-1">School of Life</a></li>
@@ -270,16 +270,16 @@ const JetLearnFooter = () => {
               <li><a href="#" className="text-sm sm:text-base text-gray-600 hover:text-gray-800 transition-colors duration-200 block py-1">Press & Media</a></li>
               <li><a href="#" className="text-sm sm:text-base text-gray-600 hover:text-gray-800 transition-colors duration-200 block py-1">Blogs</a></li>
             </ul>
-          </div>
+          </div> */}
 
           {/* Careers Column */}
-          <div className="text-center sm:text-left">
+          {/* <div className="text-center sm:text-left">
             <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 sm:mb-6">Careers</h3>
             <ul className="space-y-2 sm:space-y-3 lg:space-y-4">
               <li><a href="#" className="text-sm sm:text-base text-gray-600 hover:text-gray-800 transition-colors duration-200 block py-1">Join our Team</a></li>
               <li><a href="#" className="text-sm sm:text-base text-gray-600 hover:text-gray-800 transition-colors duration-200 block py-1">Apply as a Teacher</a></li>
             </ul>
-          </div>
+          </div> */}
         </div>
       </div>
 

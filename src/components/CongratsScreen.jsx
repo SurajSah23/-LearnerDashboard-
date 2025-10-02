@@ -96,12 +96,12 @@ const CongratsScreen = ({ dashboardData }) => {
   const scheduleText = dashboardData?.isGeneric
     ? "Are you all set to start an exciting adventure into"
     : type === "trial"
-    ? "Your trial class has been scheduled for"
-    : type === "paid"
-    ? "Your next class is scheduled for"
-    : type === "event"
-    ? "Your upcoming event is scheduled for"
-    : "Your class has been scheduled for:";
+      ? "Your trial class has been scheduled for"
+      : type === "paid"
+        ? "Your next class is scheduled for"
+        : type === "event"
+          ? "Your upcoming event is scheduled for"
+          : "Your class has been scheduled for:";
 
   // Check if the class date is today (using UTC start_time for accurate comparison)
   const isToday = useCallback(() => {
@@ -360,11 +360,10 @@ const CongratsScreen = ({ dashboardData }) => {
                   <button
                     onClick={handleJoinNow}
                     disabled={!isJoinButtonActive}
-                    className={`text-[12px] font-medium px-3 py-1.5 rounded-full transition-colors ${
-                      isJoinButtonActive
+                    className={`text-[12px] font-medium px-3 py-1.5 rounded-full transition-colors ${isJoinButtonActive
                         ? "bg-blue-500 hover:bg-blue-600 text-white cursor-pointer"
                         : "bg-[#E0E0E0] text-[#999999] cursor-not-allowed"
-                    }`}
+                      }`}
                   >
                     {buttonText}
                   </button>
@@ -380,10 +379,10 @@ const CongratsScreen = ({ dashboardData }) => {
           </div>
 
           {/* Invite Friends Section */}
-          <div className="bg-gradient-to-r from-teal-500 to-green-400 rounded-lg p-2 mb-4 relative overflow-hidden max-w-sm mx-auto">
-            <div className="flex items-start justify-between">
-              <div className="flex-1 pr-2">
-                <h3 className="text-white text-sm font-bold mb-2">
+          {/* <div className="bg-gradient-to-r from-teal-500 to-green-400 rounded-lg p-2 mb-4 relative overflow-hidden max-w-sm mx-auto"> */}
+          {/* <div className="flex items-start justify-between"> */}
+          {/* <div className="flex-1 pr-2"> */}
+          {/* <h3 className="text-white text-sm font-bold mb-2">
                   Invite friends,
                   <br />
                   win rewards
@@ -394,17 +393,31 @@ const CongratsScreen = ({ dashboardData }) => {
                   placeholder="Enter Email to Invite"
                   className="px-2 py-1.5 rounded font-medium text-xs bg-white w-full max-w-[180px]"
                 />
-              </div>
+              </div> */}
 
-              {/* Original Prize Images */}
-              <div className="flex-shrink-0">
+          {/* Original Prize Images */}
+          {/* <div className="flex-shrink-0">
                 <img
                   src="https://cdn.prod.website-files.com/61f64598c68d4ab53ecff616/68bfd8f40c201171a65eff34_Referral%20Website%20Multi-Design%20(7).png"
                   alt="Referral design decoration"
                   className="w-32 h-28 object-contain"
                 />
-              </div>
-            </div>
+              </div> */}
+          {/* </div> */}
+          {/* </div> */}
+
+          {/* Invite Friends Section */}
+          <div className="mb-6 text-center">
+            <a
+              href="https://www.jetlearn.com/invite-a-friend"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block"
+            >
+              <button className="px-8 py-3 rounded-lg font-semibold text-base bg-gradient-to-r from-blue-400 via-blue-400 to-green-500 text-white hover:from-blue-500 hover:via-blue-500 hover:to-green-600 transition-all shadow-lg hover:shadow-xl">
+                Invite Friends, Win Rewards
+              </button>
+            </a>
           </div>
         </div>
 
@@ -451,11 +464,10 @@ const CongratsScreen = ({ dashboardData }) => {
                             <button
                               onClick={handleJoinNow}
                               disabled={!isJoinButtonActive}
-                              className={`px-4 xs:px-6 sm:px-8 py-2 xs:py-2 sm:py-3 rounded-full font-semibold text-sm xs:text-base sm:text-lg transition-colors w-full sm:w-auto relative z-20 ${
-                                isJoinButtonActive
+                              className={`px-4 xs:px-6 sm:px-8 py-2 xs:py-2 sm:py-3 rounded-full font-semibold text-sm xs:text-base sm:text-lg transition-colors w-full sm:w-auto relative z-20 ${isJoinButtonActive
                                   ? "bg-blue-500 hover:bg-blue-600 text-white cursor-pointer"
                                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                              }`}
+                                }`}
                             >
                               {buttonText}
                             </button>
@@ -481,8 +493,8 @@ const CongratsScreen = ({ dashboardData }) => {
             </div>
 
             {/* Invite Friends Section */}
-            <div className="bg-gradient-to-r from-blue-400 via-blue-400 to-green-500 rounded-xl xs:rounded-2xl p-3 xs:p-4 sm:p-6 relative overflow-hidden lg:p-8 max-w-lg">
-              <div className="relative z-10">
+            {/* <div className="bg-gradient-to-r from-blue-400 via-blue-400 to-green-500 rounded-xl xs:rounded-2xl p-3 xs:p-4 sm:p-6 relative overflow-hidden lg:p-8 max-w-lg"> */}
+            {/* <div className="relative z-10">
                 <h3 className="text-white text-lg xs:text-xl sm:text-2xl font-bold mb-3 xs:mb-4">
                   Invite friends,
                   <br />
@@ -496,16 +508,30 @@ const CongratsScreen = ({ dashboardData }) => {
                     className="px-3 xs:px-3 sm:px-3 py-2 xs:py-2 sm:py-2.5 rounded-lg font-medium text-sm xs:text-sm sm:text-sm bg-white w-full sm:w-auto min-w-0 sm:min-w-[160px] max-w-[180px]"
                   />
                 </div>
-              </div>
+              </div> */}
 
-              {/* Decorative elements - Referral Design */}
-              <div className="absolute right-1 xs:right-2 sm:right-3 top-1 xs:top-2 sm:top-3">
+            {/* Decorative elements - Referral Design */}
+            {/* <div className="absolute right-1 xs:right-2 sm:right-3 top-1 xs:top-2 sm:top-3">
                 <img
                   src="https://cdn.prod.website-files.com/61f64598c68d4ab53ecff616/68bfd8f40c201171a65eff34_Referral%20Website%20Multi-Design%20(7).png"
                   alt="Referral design decoration"
                   className="w-32 h-24 xs:w-36 xs:h-28 sm:w-48 sm:h-36 md:w-56 md:h-44 -translate-y-1 xs:-translate-y-2 sm:-translate-y-3 opacity-60 xs:opacity-80 sm:opacity-100 object-contain"
                 />
-              </div>
+              </div> */}
+            {/* </div> */}
+
+            {/* Invite Friends Section */}
+            <div className="mb-6">
+              <a
+                href="https://www.jetlearn.com/invite-a-friend"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block"
+              >
+                <button className="px-8 py-3 rounded-lg font-semibold text-base bg-gradient-to-r from-blue-400 via-blue-400 to-green-500 text-white hover:from-blue-500 hover:via-blue-500 hover:to-green-600 transition-all shadow-lg hover:shadow-xl">
+                  Invite Friends, Win Rewards
+                </button>
+              </a>
             </div>
           </div>
 
