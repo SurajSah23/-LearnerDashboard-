@@ -4,19 +4,35 @@ import { MdMessage } from "react-icons/md";
 import { parseStartTime, sendJoinTrigger, getUrlParams } from "../services/api";
 
 const CongratsScreen = ({ dashboardData }) => {
+  // Get type from URL params to determine which time field to use
+  const { type } = getUrlParams();
+
+  // Use event_start_time_cx if type is "event", otherwise use start_time_cx
+  const startTimeCx =
+    type === "event"
+      ? dashboardData?.event_start_time_cx
+      : dashboardData?.start_time_cx;
+
   // Parse start_time_cx to get formatted date and time
-  const { date, time } = parseStartTime(dashboardData?.start_time_cx);
+  const { date, time } = parseStartTime(startTimeCx);
 
   // State for tracking button status
   const [isAutoRedirected, setIsAutoRedirected] = useState(false);
   const [classHasEnded, setClassHasEnded] = useState(false);
 
-  // Determine the schedule text based on parameter type
+  // Determine the schedule text based on type parameter
   const scheduleText = dashboardData?.isGeneric
     ? "Are you all set to start an exciting adventure into"
-    : dashboardData?.parameterType === "jet_id"
-    ? "Your next class is scheduled for:"
+    : type === "trial"
+    ? "Your trial class has been scheduled for"
+    : type === "paid"
+    ? "Your next class is scheduled for"
+    : type === "event"
+    ? "Your upcoming event"
     : "Your class has been scheduled for:";
+
+  // Additional text for event type
+  const scheduleTextSuffix = type === "event" ? "is scheduled for" : "";
 
   // Check if the class date is today (using UTC start_time for accurate comparison)
   const isToday = useCallback(() => {
@@ -257,6 +273,15 @@ const CongratsScreen = ({ dashboardData }) => {
           <div className="mb-3 xs:mb-4">
             <p className="text-xs text-gray-600 mb-2 px-2 text-center">
               {scheduleText}
+              {type === "event" && dashboardData?.event_name && (
+                <>
+                  {" "}
+                  <span className="text-blue-500 font-semibold">
+                    {dashboardData.event_name}
+                  </span>{" "}
+                  {scheduleTextSuffix}
+                </>
+              )}
             </p>
             {!dashboardData?.isGeneric && (
               <>
@@ -350,6 +375,15 @@ const CongratsScreen = ({ dashboardData }) => {
                     <div className="relative inline-block w-full">
                       <p className="text-base xs:text-lg sm:text-xl md:text-2xl font-semibold text-gray-800 mb-3 xs:mb-4 sm:mb-6 relative z-20">
                         {scheduleText}
+                        {type === "event" && dashboardData?.event_name && (
+                          <>
+                            {" "}
+                            <span className="text-blue-500 font-semibold">
+                              {dashboardData.event_name}
+                            </span>{" "}
+                            {scheduleTextSuffix}
+                          </>
+                        )}
                       </p>
 
                       {!dashboardData?.isGeneric && (
