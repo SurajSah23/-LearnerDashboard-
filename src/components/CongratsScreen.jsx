@@ -438,45 +438,36 @@ const CongratsScreen = ({ dashboardData }) => {
           </div>
 
           {/* Invite Friends Section */}
-          {/* <div className="bg-gradient-to-r from-teal-500 to-green-400 rounded-lg p-2 mb-4 relative overflow-hidden max-w-sm mx-auto"> */}
-          {/* <div className="flex items-start justify-between"> */}
-          {/* <div className="flex-1 pr-2"> */}
-          {/* <h3 className="text-white text-sm font-bold mb-2">
+          <div className="bg-gradient-to-r from-blue-400 via-blue-400 to-green-500 rounded-lg p-3 mb-4 relative overflow-hidden max-w-sm mx-auto">
+            <div className="flex items-start justify-between">
+              <div className="flex-1 pr-2">
+                <h3 className="text-white text-sm font-bold mb-2">
                   Invite friends,
                   <br />
                   win rewards
                 </h3>
 
-                <input
-                  type="email"
-                  placeholder="Enter Email to Invite"
-                  className="px-2 py-1.5 rounded font-medium text-xs bg-white w-full max-w-[180px]"
-                />
-              </div> */}
+                <a
+                  href="https://www.jetlearn.com/invite-a-friend"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block"
+                >
+                  <button className="px-4 py-2 rounded-lg font-semibold text-xs bg-white text-blue-600 hover:bg-gray-100 transition-all shadow-md cursor-pointer">
+                    Grow together, unlock rewards
+                  </button>
+                </a>
+              </div>
 
-          {/* Original Prize Images */}
-          {/* <div className="flex-shrink-0">
+              {/* Original Prize Images */}
+              <div className="flex-shrink-0">
                 <img
                   src="https://cdn.prod.website-files.com/61f64598c68d4ab53ecff616/68bfd8f40c201171a65eff34_Referral%20Website%20Multi-Design%20(7).png"
                   alt="Referral design decoration"
                   className="w-32 h-28 object-contain"
                 />
-              </div> */}
-          {/* </div> */}
-          {/* </div> */}
-
-          {/* Invite Friends Section */}
-          <div className="mb-6 text-center">
-            <a
-              href="https://www.jetlearn.com/invite-a-friend"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block"
-            >
-              <button className="px-8 py-3 rounded-lg font-semibold text-base bg-gradient-to-r from-blue-400 via-blue-400 to-green-500 text-white hover:from-blue-500 hover:via-blue-500 hover:to-green-600 transition-all shadow-lg hover:shadow-xl">
-                Invite Friends, Win Rewards
-              </button>
-            </a>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -584,8 +575,8 @@ const CongratsScreen = ({ dashboardData }) => {
             </div>
 
             {/* Invite Friends Section */}
-            {/* <div className="bg-gradient-to-r from-blue-400 via-blue-400 to-green-500 rounded-xl xs:rounded-2xl p-3 xs:p-4 sm:p-6 relative overflow-hidden lg:p-8 max-w-lg"> */}
-            {/* <div className="relative z-10">
+            <div className="bg-gradient-to-r from-blue-400 via-blue-400 to-green-500 rounded-xl xs:rounded-2xl p-3 xs:p-4 sm:p-6 relative overflow-hidden lg:p-8 max-w-lg">
+              <div className="relative z-10">
                 <h3 className="text-white text-lg xs:text-xl sm:text-2xl font-bold mb-3 xs:mb-4">
                   Invite friends,
                   <br />
@@ -593,36 +584,27 @@ const CongratsScreen = ({ dashboardData }) => {
                 </h3>
 
                 <div className="mt-3 xs:mt-4">
-                  <input
-                    type="email"
-                    placeholder="Enter Email to Invite"
-                    className="px-3 xs:px-3 sm:px-3 py-2 xs:py-2 sm:py-2.5 rounded-lg font-medium text-sm xs:text-sm sm:text-sm bg-white w-full sm:w-auto min-w-0 sm:min-w-[160px] max-w-[180px]"
-                  />
+                  <a
+                    href="https://www.jetlearn.com/invite-a-friend"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block"
+                  >
+                    <button className="px-6 py-2.5 rounded-lg font-semibold text-sm bg-white text-blue-600 hover:bg-gray-100 transition-all shadow-md hover:shadow-lg cursor-pointer">
+                      Grow together, unlock rewards
+                    </button>
+                  </a>
                 </div>
-              </div> */}
+              </div>
 
-            {/* Decorative elements - Referral Design */}
-            {/* <div className="absolute right-1 xs:right-2 sm:right-3 top-1 xs:top-2 sm:top-3">
+              {/* Decorative elements - Referral Design */}
+              <div className="absolute right-1 xs:right-2 sm:right-3 top-1 xs:top-2 sm:top-3">
                 <img
                   src="https://cdn.prod.website-files.com/61f64598c68d4ab53ecff616/68bfd8f40c201171a65eff34_Referral%20Website%20Multi-Design%20(7).png"
                   alt="Referral design decoration"
                   className="w-32 h-24 xs:w-36 xs:h-28 sm:w-48 sm:h-36 md:w-56 md:h-44 -translate-y-1 xs:-translate-y-2 sm:-translate-y-3 opacity-60 xs:opacity-80 sm:opacity-100 object-contain"
                 />
-              </div> */}
-            {/* </div> */}
-
-            {/* Invite Friends Section */}
-            <div className="mb-6">
-              <a
-                href="https://www.jetlearn.com/invite-a-friend"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block"
-              >
-                <button className="px-8 py-3 rounded-lg font-semibold text-base bg-gradient-to-r from-blue-400 via-blue-400 to-green-500 text-white hover:from-blue-500 hover:via-blue-500 hover:to-green-600 transition-all shadow-lg hover:shadow-xl">
-                  Invite Friends, Win Rewards
-                </button>
-              </a>
+              </div>
             </div>
           </div>
 
