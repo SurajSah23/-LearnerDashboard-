@@ -114,11 +114,11 @@ const JetLearnFooter = () => {
         <div className="border-t border-gray-200 mb-8 sm:mb-10 lg:mb-12 hidden"></div>
 
         {/* Footer Links Section - Mobile Accordion / Desktop Grid */}
-        <div className="block sm:hidden">
+        {/* <div className="block sm:hidden"> */}
           {/* Mobile Accordion View */}
-          <div className="space-y-4">
+          {/* <div className="space-y-4"> */}
             {/* Courses Section */}
-            <div className="border-b border-gray-200 pb-4">
+            {/* <div className="border-b border-gray-200 pb-4">
               <button
                 onClick={() => toggleSection('courses')}
                 className="flex justify-between items-center w-full text-left"
@@ -135,10 +135,10 @@ const JetLearnFooter = () => {
                   <li><a href="#" className="text-sm text-gray-600 hover:text-gray-800 transition-colors duration-200 block py-1">Roblox</a></li>
                 </ul>
               )}
-            </div>
+            </div> */}
 
             {/* About JetLearn Section */}
-            <div className="border-b border-gray-200 pb-4">
+            {/* <div className="border-b border-gray-200 pb-4">
               <button
                 onClick={() => toggleSection('about')}
                 className="flex justify-between items-center w-full text-left"
@@ -159,10 +159,10 @@ const JetLearnFooter = () => {
                   <li><a href="#" className="text-sm text-gray-600 hover:text-gray-800 transition-colors duration-200 block py-1">Download Brochure</a></li>
                 </ul>
               )}
-            </div>
+            </div> */}
 
             {/* Programs Section */}
-            <div className="border-b border-gray-200 pb-4">
+            {/* <div className="border-b border-gray-200 pb-4">
               <button
                 onClick={() => toggleSection('programs')}
                 className="flex justify-between items-center w-full text-left"
@@ -188,10 +188,10 @@ const JetLearnFooter = () => {
                   </div>
                 </div>
               )}
-            </div>
+            </div> */}
 
             {/* Articles Section */}
-            <div className="border-b border-gray-200 pb-4">
+            {/* <div className="border-b border-gray-200 pb-4">
               <button
                 onClick={() => toggleSection('articles')}
                 className="flex justify-between items-center w-full text-left"
@@ -207,10 +207,10 @@ const JetLearnFooter = () => {
                   <li><a href="#" className="text-sm text-gray-600 hover:text-gray-800 transition-colors duration-200 block py-1">Blogs</a></li>
                 </ul>
               )}
-            </div>
+            </div> */}
 
             {/* Careers Section */}
-            <div className="border-b border-gray-200 pb-4">
+            {/* <div className="border-b border-gray-200 pb-4">
               <button
                 onClick={() => toggleSection('careers')}
                 className="flex justify-between items-center w-full text-left"
@@ -226,9 +226,9 @@ const JetLearnFooter = () => {
                   <li><a href="#" className="text-sm text-gray-600 hover:text-gray-800 transition-colors duration-200 block py-1">Apply as a Teacher</a></li>
                 </ul>
               )}
-            </div>
-          </div>
-        </div>
+            </div> */}
+          {/* </div> */}
+        {/* </div> */}
 
         {/* Desktop Grid View */}
         <div className="hidden sm:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 lg:gap-12">
