@@ -92,16 +92,41 @@ const CongratsScreen = ({ dashboardData }) => {
   const [isAutoRedirected, setIsAutoRedirected] = useState(false);
   const [classHasEnded, setClassHasEnded] = useState(false);
 
+  // Extract first name from student name
+  const firstName = dashboardData?.student_name
+    ? dashboardData.student_name.split(" ")[0]
+    : "your child";
+
   // Determine the schedule text based on type parameter
-  const scheduleText = dashboardData?.isGeneric
-    ? "Are you all set to start an exciting adventure into"
-    : type === "trial"
-      ? "Your trial class has been scheduled for"
-      : type === "paid"
-        ? "Your next class is scheduled for"
-        : type === "event"
-          ? "Your upcoming event is scheduled for"
-          : "Your class has been scheduled for:";
+  const scheduleText = dashboardData?.isGeneric ? (
+    "Are you all set to start an exciting adventure into"
+  ) : type === "trial" ? (
+    "Your trial class has been scheduled for"
+  ) : type === "paid" ? (
+    "Your next class is scheduled for"
+  ) : type === "event" && jetId ? (
+    jetId.charAt(jetId.length - 1).toUpperCase() === "C" ? (
+      <>
+        Get ready for an interactive 60-minute session where {firstName} will{" "}
+        <strong>build their first AI-powered mini project</strong> and{" "}
+        <strong>learn the basics of coding and logical thinking.</strong>
+      </>
+    ) : jetId.charAt(jetId.length - 1).toUpperCase() === "M" ? (
+      <>
+        Get ready for an interactive 60-minute session where {firstName} will{" "}
+        <strong>solve real-world problems</strong> and{" "}
+        <strong>
+          learn how math powers logic, creativity, and confidence.
+        </strong>
+      </>
+    ) : (
+      "Your upcoming event is scheduled for"
+    )
+  ) : type === "event" ? (
+    "Your upcoming event is scheduled for"
+  ) : (
+    "Your class has been scheduled for:"
+  );
 
   // Check if the class date is today (using UTC start_time for accurate comparison)
   const isToday = useCallback(() => {
@@ -296,18 +321,51 @@ const CongratsScreen = ({ dashboardData }) => {
           {/* Main Heading - Centered */}
           <div className="text-center mb-4">
             <h1 className="text-xl font-bold text-gray-900 mb-3">
-              You are all set!
+              {type === "event" ? "🎉 You're Registered," : "You are all set!"}
             </h1>
 
             <p className="text-sm text-gray-600 leading-relaxed mx-auto px-2">
-              <span className="font-semibold text-gray-800">
-                {dashboardData?.student_name || "Emily"}
-              </span>{" "}
-              is ready to start an exciting
-              <br />
-              adventure into the world of tech
-              <br />
-              with JetLearn.
+              {type === "event" && jetId ? (
+                <>
+                  {jetId.charAt(jetId.length - 1).toUpperCase() === "C" ? (
+                    <>
+                      <span className="font-semibold text-gray-800">
+                        {dashboardData?.student_name || "Hey Champ"}
+                      </span>{" "}
+                      Your AI & Coding Adventure Starts Soon
+                    </>
+                  ) : jetId.charAt(jetId.length - 1).toUpperCase() === "M" ? (
+                    <>
+                      <span className="font-semibold text-gray-800">
+                        {dashboardData?.student_name || "Hey Champ"}
+                      </span>{" "}
+                      ! Your Maths Adventure Starts Soon
+                    </>
+                  ) : (
+                    <>
+                      <span className="font-semibold text-gray-800">
+                        {dashboardData?.student_name || "Hey Champ"}
+                      </span>{" "}
+                      is ready to start an exciting
+                      <br />
+                      adventure into the world of tech
+                      <br />
+                      with JetLearn.
+                    </>
+                  )}
+                </>
+              ) : (
+                <>
+                  <span className="font-semibold text-gray-800">
+                    {dashboardData?.student_name || "Hey Champ"}
+                  </span>{" "}
+                  is ready to start an exciting
+                  <br />
+                  adventure into the world of tech
+                  <br />
+                  with JetLearn.
+                </>
+              )}
             </p>
           </div>
 
@@ -360,10 +418,11 @@ const CongratsScreen = ({ dashboardData }) => {
                   <button
                     onClick={handleJoinNow}
                     disabled={!isJoinButtonActive}
-                    className={`text-[12px] font-medium px-3 py-1.5 rounded-full transition-colors ${isJoinButtonActive
+                    className={`text-[12px] font-medium px-3 py-1.5 rounded-full transition-colors ${
+                      isJoinButtonActive
                         ? "bg-blue-500 hover:bg-blue-600 text-white cursor-pointer"
                         : "bg-[#E0E0E0] text-[#999999] cursor-not-allowed"
-                      }`}
+                    }`}
                   >
                     {buttonText}
                   </button>
@@ -426,16 +485,47 @@ const CongratsScreen = ({ dashboardData }) => {
           {/* Left Content */}
           <div className="w-full lg:w-1/2 px-4 sm:px-6 md:px-8 py-4 lg:ml-16">
             <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold text-gray-900 mb-3 xs:mb-4 sm:mb-6 md:mb-8 leading-tight">
-              You are all set!
+              {type === "event" ? "🎉 You're Registered," : "You are all set!"}
             </h1>
 
             <p className="text-base xs:text-lg sm:text-xl md:text-2xl text-gray-600 mb-4 xs:mb-6 sm:mb-8 md:mb-10 leading-relaxed">
-              <span className="font-semibold text-gray-800">
-                {dashboardData?.student_name || "Emily"}
-              </span>{" "}
-              is ready to start an exciting adventure into
-              <br className="hidden sm:block" />
-              the world of tech with JetLearn.
+              {type === "event" && jetId ? (
+                <>
+                  {jetId.charAt(jetId.length - 1).toUpperCase() === "C" ? (
+                    <>
+                      <span className="font-semibold text-gray-800">
+                        {dashboardData?.student_name || "Hey Champ"}
+                      </span>{" "}
+                      Your AI & Coding Adventure Starts Soon
+                    </>
+                  ) : jetId.charAt(jetId.length - 1).toUpperCase() === "M" ? (
+                    <>
+                      <span className="font-semibold text-gray-800">
+                        {dashboardData?.student_name || "Hey Champ"}
+                      </span>{" "}
+                      ! Your Maths Adventure Starts Soon
+                    </>
+                  ) : (
+                    <>
+                      <span className="font-semibold text-gray-800">
+                        {dashboardData?.student_name || "Hey Champ"}
+                      </span>{" "}
+                      is ready to start an exciting adventure into
+                      <br className="hidden sm:block" />
+                      the world of tech with JetLearn.
+                    </>
+                  )}
+                </>
+              ) : (
+                <>
+                  <span className="font-semibold text-gray-800">
+                    {dashboardData?.student_name || "Hey Champ"}
+                  </span>{" "}
+                  is ready to start an exciting adventure into
+                  <br className="hidden sm:block" />
+                  the world of tech with JetLearn.
+                </>
+              )}
             </p>
 
             {/* Schedule Info Section - Image-like Positioning */}
@@ -464,10 +554,11 @@ const CongratsScreen = ({ dashboardData }) => {
                             <button
                               onClick={handleJoinNow}
                               disabled={!isJoinButtonActive}
-                              className={`px-4 xs:px-6 sm:px-8 py-2 xs:py-2 sm:py-3 rounded-full font-semibold text-sm xs:text-base sm:text-lg transition-colors w-full sm:w-auto relative z-20 ${isJoinButtonActive
+                              className={`px-4 xs:px-6 sm:px-8 py-2 xs:py-2 sm:py-3 rounded-full font-semibold text-sm xs:text-base sm:text-lg transition-colors w-full sm:w-auto relative z-20 ${
+                                isJoinButtonActive
                                   ? "bg-blue-500 hover:bg-blue-600 text-white cursor-pointer"
                                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                                }`}
+                              }`}
                             >
                               {buttonText}
                             </button>
