@@ -251,10 +251,13 @@ function App() {
         setDashboardData(processedData);
 
         console.log("Dashboard data loaded:", processedData);
-        
+
         // Log if error status was returned
         if (data.status === "error") {
-          console.warn("API returned error, displaying basic page:", data.message);
+          console.warn(
+            "API returned error, displaying basic page:",
+            data.message
+          );
         }
       } catch (err) {
         console.error("Failed to load dashboard data:", err);
