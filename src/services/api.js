@@ -222,7 +222,7 @@ export const parseStartTime = (startTimeCx) => {
     }
 
     // Use the original timezone if available, otherwise default to EST
-    const timezone = date._originalTimezone || "EST";
+    const timezone = date._originalTimezone || "IST";
     console.log("Final timezone being used:", timezone);
 
     const result = {
