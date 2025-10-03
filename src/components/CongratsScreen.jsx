@@ -10,7 +10,7 @@ const CongratsScreen = ({ dashboardData }) => {
   // Use event_start_time_cx if type is "event", otherwise use start_time_cx
   const startTimeCx =
     type === "event"
-      ? dashboardData?.event_start_time_cx
+      ? dashboardData?.event_start_time_utc
       : dashboardData?.start_time_cx;
 
   // Determine zoom link - assign based on jet_id last char if type is event and zoom_link is null
@@ -59,7 +59,7 @@ const CongratsScreen = ({ dashboardData }) => {
   // If event_start_time_cx is null and type is event, set to next day 9:30 - 10:30 PM IST
   if (type === "event" && !startTimeCx) {
     const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setDate(tomorrow.getDate());
 
     const formattedDate = tomorrow.toLocaleDateString("en-US", {
       weekday: "long",
