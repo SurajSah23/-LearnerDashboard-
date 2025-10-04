@@ -3,7 +3,7 @@ import Header from "./Header";
 import { MdMessage } from "react-icons/md";
 import { parseStartTime, sendJoinTrigger, getUrlParams } from "../services/api";
 
-const CongratsScreen = ({ dashboardData }) => {
+const CongratsScreen = ({ dashboardData, browserData }) => {
   // Get type from URL params to determine which time field to use
   const { type, jetId } = getUrlParams();
 
@@ -54,7 +54,10 @@ const CongratsScreen = ({ dashboardData }) => {
   }
 
   // Parse start_time_cx to get formatted date and time
-  let parsedDateTime = parseStartTime(startTimeCx);
+  // Use browser timezone as default if available
+  const browserTimezone = browserData?.timezone?.timezone;
+  console.log("Browser timezone from browserData:", browserTimezone);
+  let parsedDateTime = parseStartTime(startTimeCx, browserTimezone);
 
   // If event_start_time_cx is null and type is event, set to next day 9:30 - 10:30 PM IST
   if (type === "event" && !startTimeCx) {

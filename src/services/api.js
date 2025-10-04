@@ -70,11 +70,368 @@ export const fetchDashboardData = async (jetId = null, type = "trial") => {
 };
 
 /**
+ * Convert IANA timezone identifier to timezone abbreviation
+ * @param {string} timezone - IANA timezone identifier (e.g., "Europe/London", "Asia/Kolkata")
+ * @returns {string} - Timezone abbreviation (e.g., "BST", "IST")
+ */
+const getTimezoneAbbreviation = (timezone) => {
+  if (!timezone) return "GMT";
+
+  // Mapping of IANA timezone identifiers to their standard abbreviations
+  const timezoneAbbreviations = {
+    // Europe
+    "Europe/London": "GMT", // Will be BST in summer, but we'll handle that
+    "Europe/Dublin": "GMT",
+    "Europe/Paris": "CET",
+    "Europe/Berlin": "CET",
+    "Europe/Rome": "CET",
+    "Europe/Madrid": "CET",
+    "Europe/Amsterdam": "CET",
+    "Europe/Brussels": "CET",
+    "Europe/Vienna": "CET",
+    "Europe/Zurich": "CET",
+    "Europe/Stockholm": "CET",
+    "Europe/Oslo": "CET",
+    "Europe/Copenhagen": "CET",
+    "Europe/Helsinki": "EET",
+    "Europe/Athens": "EET",
+    "Europe/Istanbul": "TRT",
+    "Europe/Moscow": "MSK",
+
+    // Asia
+    "Asia/Kolkata": "IST",
+    "Asia/Dhaka": "BST",
+    "Asia/Karachi": "PKT",
+    "Asia/Colombo": "IST",
+    "Asia/Kathmandu": "NPT",
+    "Asia/Thimphu": "BTT",
+    "Asia/Dubai": "GST",
+    "Asia/Muscat": "GST",
+    "Asia/Kuwait": "AST",
+    "Asia/Riyadh": "AST",
+    "Asia/Bahrain": "AST",
+    "Asia/Qatar": "AST",
+    "Asia/Tehran": "IRST",
+    "Asia/Tokyo": "JST",
+    "Asia/Seoul": "KST",
+    "Asia/Shanghai": "CST",
+    "Asia/Hong_Kong": "HKT",
+    "Asia/Singapore": "SGT",
+    "Asia/Bangkok": "ICT",
+    "Asia/Jakarta": "WIB",
+    "Asia/Manila": "PHT",
+    "Asia/Kuala_Lumpur": "MYT",
+    "Asia/Ho_Chi_Minh": "ICT",
+    "Asia/Taipei": "CST",
+    "Asia/Macau": "CST",
+    "Asia/Ulaanbaatar": "ULAT",
+    "Asia/Vladivostok": "VLAT",
+    "Asia/Yakutsk": "YAKT",
+    "Asia/Omsk": "OMST",
+    "Asia/Novosibirsk": "NOVT",
+    "Asia/Krasnoyarsk": "KRAT",
+    "Asia/Irkutsk": "IRKT",
+    "Asia/Yekaterinburg": "YEKT",
+    "Asia/Samara": "SAMT",
+    "Asia/Volgograd": "VOLT",
+
+    // Americas
+    "America/New_York": "EST",
+    "America/Chicago": "CST",
+    "America/Denver": "MST",
+    "America/Los_Angeles": "PST",
+    "America/Phoenix": "MST",
+    "America/Anchorage": "AKST",
+    "America/Honolulu": "HST",
+    "America/Toronto": "EST",
+    "America/Vancouver": "PST",
+    "America/Montreal": "EST",
+    "America/Winnipeg": "CST",
+    "America/Edmonton": "MST",
+    "America/Calgary": "MST",
+    "America/Regina": "CST",
+    "America/St_Johns": "NST",
+    "America/Halifax": "AST",
+    "America/Glace_Bay": "AST",
+    "America/Moncton": "AST",
+    "America/Goose_Bay": "AST",
+    "America/Blanc-Sablon": "AST",
+    "America/Mexico_City": "CST",
+    "America/Cancun": "EST",
+    "America/Merida": "CST",
+    "America/Monterrey": "CST",
+    "America/Matamoros": "CST",
+    "America/Mazatlan": "MST",
+    "America/Chihuahua": "MST",
+    "America/Ojinaga": "MST",
+    "America/Hermosillo": "MST",
+    "America/Tijuana": "PST",
+    "America/Bahia_Banderas": "CST",
+    "America/Sao_Paulo": "BRT",
+    "America/Argentina/Buenos_Aires": "ART",
+    "America/Santiago": "CLT",
+    "America/Lima": "PET",
+    "America/Bogota": "COT",
+    "America/Caracas": "VET",
+    "America/La_Paz": "BOT",
+    "America/Asuncion": "PYT",
+    "America/Montevideo": "UYT",
+    "America/Guyana": "GYT",
+    "America/Paramaribo": "SRT",
+    "America/Cayenne": "GFT",
+    "America/Fortaleza": "BRT",
+    "America/Recife": "BRT",
+    "America/Araguaina": "BRT",
+    "America/Maceio": "BRT",
+    "America/Bahia": "BRT",
+    "America/Santarem": "BRT",
+    "America/Porto_Velho": "AMT",
+    "America/Boa_Vista": "AMT",
+    "America/Manaus": "AMT",
+    "America/Eirunepe": "AMT",
+    "America/Rio_Branco": "AMT",
+    "America/Nassau": "EST",
+    "America/Barbados": "AST",
+    "America/Belize": "CST",
+    "America/Costa_Rica": "CST",
+    "America/El_Salvador": "CST",
+    "America/Guatemala": "CST",
+    "America/Tegucigalpa": "CST",
+    "America/Managua": "CST",
+    "America/Panama": "EST",
+    "America/Cayman": "EST",
+    "America/Jamaica": "EST",
+    "America/Havana": "CST",
+    "America/Port-au-Prince": "EST",
+    "America/Santo_Domingo": "AST",
+    "America/Puerto_Rico": "AST",
+    "America/St_Thomas": "AST",
+    "America/St_Lucia": "AST",
+    "America/St_Vincent": "AST",
+    "America/Grenada": "AST",
+    "America/Dominica": "AST",
+    "America/Antigua": "AST",
+    "America/St_Kitts": "AST",
+    "America/Guadeloupe": "AST",
+    "America/Martinique": "AST",
+    "America/Aruba": "AST",
+    "America/Curacao": "AST",
+    "America/Lower_Princes": "AST",
+    "America/Marigot": "AST",
+    "America/St_Barthelemy": "AST",
+    "America/Kralendijk": "AST",
+    "America/Philipsburg": "AST",
+    "America/Anguilla": "AST",
+    "America/Montserrat": "AST",
+    "America/Tortola": "AST",
+    "America/Virgin": "AST",
+    "America/Port_of_Spain": "AST",
+    "America/St_Johns": "NST",
+    "America/Halifax": "AST",
+    "America/Glace_Bay": "AST",
+    "America/Moncton": "AST",
+    "America/Goose_Bay": "AST",
+    "America/Blanc-Sablon": "AST",
+
+    // Africa
+    "Africa/Cairo": "EET",
+    "Africa/Johannesburg": "SAST",
+    "Africa/Lagos": "WAT",
+    "Africa/Casablanca": "WET",
+    "Africa/Algiers": "CET",
+    "Africa/Tunis": "CET",
+    "Africa/Tripoli": "EET",
+    "Africa/Khartoum": "CAT",
+    "Africa/Addis_Ababa": "EAT",
+    "Africa/Nairobi": "EAT",
+    "Africa/Dar_es_Salaam": "EAT",
+    "Africa/Kampala": "EAT",
+    "Africa/Kigali": "CAT",
+    "Africa/Bujumbura": "CAT",
+    "Africa/Gaborone": "CAT",
+    "Africa/Harare": "CAT",
+    "Africa/Lusaka": "CAT",
+    "Africa/Maputo": "CAT",
+    "Africa/Windhoek": "WAT",
+    "Africa/Luanda": "WAT",
+    "Africa/Porto-Novo": "WAT",
+    "Africa/Douala": "WAT",
+    "Africa/Libreville": "WAT",
+    "Africa/Malabo": "WAT",
+    "Africa/Niamey": "WAT",
+    "Africa/Ndjamena": "WAT",
+    "Africa/Bangui": "WAT",
+    "Africa/Brazzaville": "WAT",
+    "Africa/Kinshasa": "WAT",
+    "Africa/Lubumbashi": "CAT",
+    "Africa/Bujumbura": "CAT",
+    "Africa/Kigali": "CAT",
+    "Africa/Gitega": "CAT",
+    "Africa/Dodoma": "EAT",
+    "Africa/Asmara": "EAT",
+    "Africa/Asmera": "EAT",
+    "Africa/Mogadishu": "EAT",
+    "Africa/Djibouti": "EAT",
+    "Africa/Kampala": "EAT",
+    "Africa/Khartoum": "CAT",
+    "Africa/Juba": "CAT",
+    "Africa/Bamako": "GMT",
+    "Africa/Banjul": "GMT",
+    "Africa/Bissau": "GMT",
+    "Africa/Conakry": "GMT",
+    "Africa/Dakar": "GMT",
+    "Africa/Freetown": "GMT",
+    "Africa/Lome": "GMT",
+    "Africa/Monrovia": "GMT",
+    "Africa/Nouakchott": "GMT",
+    "Africa/Ouagadougou": "GMT",
+    "Africa/Sao_Tome": "GMT",
+    "Africa/Accra": "GMT",
+    "Africa/Abidjan": "GMT",
+    "Africa/Yamoussoukro": "GMT",
+    "Africa/El_Aaiun": "WET",
+    "Africa/Ceuta": "CET",
+    "Africa/Melilla": "CET",
+
+    // Australia/Oceania
+    "Australia/Sydney": "AEST",
+    "Australia/Melbourne": "AEST",
+    "Australia/Brisbane": "AEST",
+    "Australia/Perth": "AWST",
+    "Australia/Adelaide": "ACST",
+    "Australia/Darwin": "ACST",
+    "Australia/Hobart": "AEST",
+    "Australia/Currie": "AEST",
+    "Australia/Lord_Howe": "LHST",
+    "Australia/Broken_Hill": "ACST",
+    "Australia/Eucla": "ACWST",
+    "Australia/Lindeman": "AEST",
+    "Australia/Canberra": "AEST",
+    "Australia/ACT": "AEST",
+    "Australia/NSW": "AEST",
+    "Australia/North": "ACST",
+    "Australia/South": "ACST",
+    "Australia/Tasmania": "AEST",
+    "Australia/Victoria": "AEST",
+    "Australia/West": "AWST",
+    "Australia/Queensland": "AEST",
+    "Pacific/Auckland": "NZST",
+    "Pacific/Chatham": "CHAST",
+    "Pacific/Fiji": "FJT",
+    "Pacific/Tongatapu": "TOT",
+    "Pacific/Apia": "WST",
+    "Pacific/Honolulu": "HST",
+    "Pacific/Guam": "ChST",
+    "Pacific/Saipan": "ChST",
+    "Pacific/Port_Moresby": "PGT",
+    "Pacific/Noumea": "NCT",
+    "Pacific/Vanuatu": "VUT",
+    "Pacific/Solomon": "SBT",
+    "Pacific/Norfolk": "NFT",
+    "Pacific/Palau": "PWT",
+    "Pacific/Majuro": "MHT",
+    "Pacific/Kwajalein": "MHT",
+    "Pacific/Tarawa": "GILT",
+    "Pacific/Enderbury": "PHOT",
+    "Pacific/Fakaofo": "TKT",
+    "Pacific/Tahiti": "TAHT",
+    "Pacific/Marquesas": "MART",
+    "Pacific/Gambier": "GAMT",
+    "Pacific/Pitcairn": "PST",
+    "Pacific/Easter": "EAST",
+    "Pacific/Galapagos": "GALT",
+    "Pacific/Rarotonga": "CKT",
+    "Pacific/Niue": "NUT",
+    "Pacific/Tokelau": "TKT",
+    "Pacific/Wake": "WAKT",
+    "Pacific/Chuuk": "CHUT",
+    "Pacific/Pohnpei": "PONT",
+    "Pacific/Kosrae": "KOST",
+    "Pacific/Yap": "CHUT",
+    "Pacific/Palikir": "PONT",
+    "Pacific/Bougainville": "BST",
+    "Pacific/Norfolk": "NFT",
+    "Pacific/Pitcairn": "PST",
+    "Pacific/Easter": "EAST",
+    "Pacific/Galapagos": "GALT",
+    "Pacific/Rarotonga": "CKT",
+    "Pacific/Niue": "NUT",
+    "Pacific/Tokelau": "TKT",
+    "Pacific/Wake": "WAKT",
+    "Pacific/Chuuk": "CHUT",
+    "Pacific/Pohnpei": "PONT",
+    "Pacific/Kosrae": "KOST",
+    "Pacific/Yap": "CHUT",
+    "Pacific/Palikir": "PONT",
+    "Pacific/Bougainville": "BST",
+  };
+
+  // Check if we have a direct mapping
+  if (timezoneAbbreviations[timezone]) {
+    return timezoneAbbreviations[timezone];
+  }
+
+  // For Europe/London, check if it's currently BST (British Summer Time)
+  if (timezone === "Europe/London") {
+    try {
+      const now = new Date();
+      const isDST = now
+        .toLocaleString("en", {
+          timeZone: timezone,
+          timeZoneName: "short",
+        })
+        .includes("BST");
+      return isDST ? "BST" : "GMT";
+    } catch (error) {
+      return "GMT";
+    }
+  }
+
+  // For other timezones, try to get a reasonable abbreviation
+  try {
+    const now = new Date();
+    const parts = now
+      .toLocaleString("en", {
+        timeZone: timezone,
+        timeZoneName: "short",
+      })
+      .split(" ");
+
+    // If it's an offset format like "GMT+5:30", try to map to common abbreviations
+    const timezonePart = parts[parts.length - 1];
+    if (timezonePart.includes("GMT")) {
+      // Map common GMT offsets to their standard abbreviations
+      const offsetMap = {
+        "GMT+5:30": "IST",
+        "GMT+5": "PKT",
+        "GMT+6": "BST",
+        "GMT+8": "CST",
+        "GMT+9": "JST",
+        "GMT-5": "EST",
+        "GMT-6": "CST",
+        "GMT-7": "MST",
+        "GMT-8": "PST",
+      };
+
+      if (offsetMap[timezonePart]) {
+        return offsetMap[timezonePart];
+      }
+    }
+
+    return timezonePart || timezone;
+  } catch (error) {
+    console.warn("Error getting timezone abbreviation:", error);
+    return timezone;
+  }
+};
+
+/**
  * Parse start_time_cx to extract date and time
  * @param {string} startTimeCx - The start_time_cx field from API response
+ * @param {string} browserTimezone - Optional browser timezone (e.g., from browserData.timezone.timezone)
  * @returns {Object} - Object containing formatted date and time
  */
-export const parseStartTime = (startTimeCx) => {
+export const parseStartTime = (startTimeCx, browserTimezone = null) => {
   console.log(
     "Parsing start_time_cx:",
     startTimeCx,
@@ -84,9 +441,22 @@ export const parseStartTime = (startTimeCx) => {
 
   if (!startTimeCx || startTimeCx === null || startTimeCx === undefined) {
     console.log("start_time_cx is null/undefined, using default values");
+    const defaultTimezone = browserTimezone || "Europe/London";
+
+    // Get today's date
+    const today = new Date();
+    const formattedDate = today.toLocaleDateString("en-US", {
+      weekday: "long",
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+
+    const timezoneAbbreviation = getTimezoneAbbreviation(defaultTimezone);
+
     return {
-      date: "Sunday, 14 Dec, 2025",
-      time: "8:30 - 9:30 AM EST",
+      date: formattedDate,
+      time: `5:00 - 6:00 PM ${timezoneAbbreviation}`,
     };
   }
 
@@ -204,12 +574,17 @@ export const parseStartTime = (startTimeCx) => {
       const endAmPm = endHour >= 12 ? "PM" : "AM";
       endTime = `${endHour12}:${startMinute} ${endAmPm}`;
     } else {
-      // Fallback to original method
+      // Fallback to original method with browser timezone
       console.log("Using fallback method with toLocaleTimeString");
+      const timezoneOptions = browserTimezone
+        ? { timeZone: browserTimezone }
+        : {};
+
       startTime = date.toLocaleTimeString("en-US", {
         hour: "numeric",
         minute: "2-digit",
         hour12: true,
+        ...timezoneOptions,
       });
 
       // Add 1 hour for end time (assuming 1-hour class)
@@ -218,25 +593,44 @@ export const parseStartTime = (startTimeCx) => {
         hour: "numeric",
         minute: "2-digit",
         hour12: true,
+        ...timezoneOptions,
       });
     }
 
-    // Use the original timezone if available, otherwise default to EST
-    const timezone = date._originalTimezone || "IST";
-    console.log("Final timezone being used:", timezone);
+    // Use the original timezone if available, otherwise use browser timezone, then default to Europe/London
+    const timezoneIdentifier =
+      date._originalTimezone || browserTimezone || "Europe/London";
+    const timezoneAbbreviation = getTimezoneAbbreviation(timezoneIdentifier);
+
+    console.log("Final timezone identifier being used:", timezoneIdentifier);
+    console.log("Timezone abbreviation:", timezoneAbbreviation);
+    console.log("Browser timezone provided:", browserTimezone);
 
     const result = {
       date: formattedDate,
-      time: `${startTime} - ${endTime} ${timezone}`,
+      time: `${startTime} - ${endTime} ${timezoneAbbreviation}`,
     };
 
     console.log("Parsed result:", result);
     return result;
   } catch (error) {
     console.error("Error parsing start_time_cx:", error, "Value:", startTimeCx);
+    const defaultTimezone = browserTimezone || "Europe/London";
+
+    // Get today's date
+    const today = new Date();
+    const formattedDate = today.toLocaleDateString("en-US", {
+      weekday: "long",
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+
+    const timezoneAbbreviation = getTimezoneAbbreviation(defaultTimezone);
+
     return {
-      date: "Sunday, 14 Dec, 2025",
-      time: "8:30 - 9:30 AM EST",
+      date: formattedDate,
+      time: `5:00 - 6:00 PM ${timezoneAbbreviation}`,
     };
   }
 };

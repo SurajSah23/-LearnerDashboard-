@@ -13,6 +13,7 @@ import { collectBrowserData } from "./services/browserDataCollector";
 
 function App() {
   const [dashboardData, setDashboardData] = useState(null);
+  const [browserData, setBrowserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -25,6 +26,7 @@ function App() {
         // Collect browser data first
         console.log("🔍 Collecting comprehensive browser data...");
         const collectedBrowserData = await collectBrowserData();
+        setBrowserData(collectedBrowserData);
 
         // Log all collected data in a structured format
         console.log("📊 ===== BROWSER DATA COLLECTION RESULTS =====");
@@ -304,7 +306,10 @@ function App() {
   return (
     <div className="min-h-screen flex flex-col">
       <div className="flex-1">
-        <CongratsScreen dashboardData={dashboardData} />
+        <CongratsScreen
+          dashboardData={dashboardData}
+          browserData={browserData}
+        />
       </div>
       <TrialClassPrep />
       <JetLearnBenefits />
