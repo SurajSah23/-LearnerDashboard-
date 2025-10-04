@@ -134,11 +134,33 @@ const CongratsScreen = ({ dashboardData, browserData }) => {
 
   // Check if the class date is today (using UTC start_time for accurate comparison)
   const isToday = useCallback(() => {
-    if (!dashboardData?.start_time) return false;
+    if (!dashboardData?.start_time) {
+      console.log("No start_time available, checking if we have startTimeCx");
+      // If no start_time, try to use the parsed date from startTimeCx
+      if (startTimeCx) {
+        try {
+          parseStartTime(startTimeCx, browserData?.timezone?.timezone);
+          // For now, assume it's today if we have a valid parsed date
+          console.log("Using startTimeCx as fallback, assuming today");
+          return true;
+        } catch (error) {
+          console.error("Error parsing startTimeCx:", error);
+          return false;
+        }
+      }
+      return false;
+    }
 
     try {
       const classDate = new Date(dashboardData.start_time);
       const today = new Date();
+
+      console.log("Class date:", classDate.toDateString());
+      console.log("Today's date:", today.toDateString());
+      console.log(
+        "Are they equal?",
+        classDate.toDateString() === today.toDateString()
+      );
 
       // Compare dates (ignore time)
       return classDate.toDateString() === today.toDateString();
@@ -146,7 +168,7 @@ const CongratsScreen = ({ dashboardData, browserData }) => {
       console.error("Error checking if date is today:", error);
       return false;
     }
-  }, [dashboardData?.start_time]);
+  }, [dashboardData?.start_time, startTimeCx, browserData?.timezone?.timezone]);
 
   // Calculate time until class starts (using UTC start_time for accurate calculation)
   const calculateTimeUntilClass = useCallback(() => {
@@ -248,12 +270,17 @@ const CongratsScreen = ({ dashboardData, browserData }) => {
   ]);
 
   // Check if Join Now button should be active
-  // Button is active if: has zoom link, is today, either within 5 minutes OR class has started, AND class has not ended
-  const isJoinButtonActive =
-    zoomLink &&
-    isToday() &&
-    (isWithinFiveMinutes() || hasClassStarted()) &&
-    !classHasEnded;
+  // Button is active if: has zoom link, is today, and class has not ended
+  const isTodayResult = isToday();
+  const isJoinButtonActive = zoomLink && isTodayResult && !classHasEnded;
+
+  // Debug logging for button state
+  console.log("=== BUTTON ACTIVE DEBUG ===");
+  console.log("zoomLink:", zoomLink);
+  console.log("isTodayResult:", isTodayResult);
+  console.log("classHasEnded:", classHasEnded);
+  console.log("isJoinButtonActive:", isJoinButtonActive);
+  console.log("==========================");
 
   // Memoized button text to prevent unnecessary recalculations
   const buttonText = useMemo(() => {
